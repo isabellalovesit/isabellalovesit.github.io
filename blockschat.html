@@ -1,35 +1,137 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Blocks Chat</title>
+  <title>Blocks Chat (Easy)</title>
   <style>
-    body { font-family: Arial; text-align: center; }
-    #chat { border: 1px solid black; height: 200px; overflow-y: auto; }
+    body {
+      background: radial-gradient(circle, #0b0015, #000);
+      color: #d6b3ff;
+      font-family: monospace;
+      text-align: center;
+      padding-top: 30px;
+    }
+
+    h1 { text-shadow: 0 0 15px #8f3bff; }
+
+    #chatContainer {
+      width: 400px;
+      margin: auto;
+      background: rgba(0,0,0,0.6);
+      border: 2px solid #8f3bff;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #4b0082;
+      padding: 15px;
+    }
+
+    #messages {
+      height: 250px;
+      overflow-y: auto;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid #4b0082;
+      border-radius: 8px;
+      padding: 8px;
+      text-align: left;
+      margin-bottom: 10px;
+    }
+
+    #inputContainer {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    #chatInput {
+      width: 75%;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #8f3bff;
+      background: #111;
+      color: #d6b3ff;
+    }
+
+    #sendBtn {
+      width: 20%;
+      border-radius: 8px;
+      border: 2px solid #8f3bff;
+      background: black;
+      color: #d6b3ff;
+      cursor: pointer;
+      box-shadow: 0 0 10px #6a00ff;
+    }
+
+    #sendBtn:hover {
+      box-shadow: 0 0 20px #b266ff;
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
 
-<h1>💬 Blocks Chat</h1>
+<h1>🌌 BLOCKS CHAT EASY 🌌</h1>
 
-<div id="chat"></div><br>
-
-<input id="msg" placeholder="Type message">
-<button onclick="send()">Send</button>
+<div id="chatContainer">
+  <div id="messages"></div>
+  <div id="inputContainer">
+    <input type="text" id="chatInput" placeholder="Type your message...">
+    <button id="sendBtn">Send</button>
+  </div>
+</div>
 
 <script>
-  function send() {
-    const chat = document.getElementById("chat");
-    const msg = document.getElementById("msg");
-    chat.innerHTML += "<p>" + msg.value + "</p>";
-    msg.value = "";
-    chat.scrollTop = chat.scrollHeight;
+// Ask player name once
+const playerName = prompt("Enter your player name:") || "Player";
+
+// Chat elements
+const messages = document.getElementById("messages");
+const chatInput = document.getElementById("chatInput");
+const sendBtn = document.getElementById("sendBtn");
+
+// Load previous messages from localStorage
+let chatLog = JSON.parse(localStorage.getItem("blocksChat")) || [];
+updateChat();
+
+// Send a message
+function sendMessage() {
+  const text = chatInput.value.trim();
+  if(!text) return;
+  const time = new Date().toLocaleTimeString();
+  const msg = `[${time}] ${playerName}: ${text}`;
+  chatLog.push(msg);
+  localStorage.setItem("blocksChat", JSON.stringify(chatLog));
+  chatInput.value = "";
+  updateChat();
+}
+
+// Update chat display
+function updateChat() {
+  messages.innerHTML = chatLog.map(m => `<div>${m}</div>`).join("");
+  messages.scrollTop = messages.scrollHeight;
+}
+
+// Listen for localStorage changes (other tabs)
+window.addEventListener("storage", e => {
+  if(e.key === "blocksChat") {
+    chatLog = JSON.parse(e.newValue);
+    updateChat();
   }
+});
+
+// Send button and Enter key
+sendBtn.addEventListener("click", sendMessage);
+chatInput.addEventListener("keydown", e => {
+  if(e.key === "Enter") sendMessage();
+});
 </script>
 <button onclick="location.href='index.html'" 
-        style="padding:10px 20px; margin:10px; font-size:18px; border-radius:10px;">
-  ⬅ Back to Home
+        style="position:fixed; top:10px; left:10px; 
+               padding:10px 20px; font-size:18px; 
+               border-radius:10px; border:2px solid #8f3bff; 
+               background:black; color:#d6b3ff; 
+               box-shadow:0 0 12px #6a00ff; cursor:pointer;">
+  ⬅ Home
 </button>
 
 </body>
 </html>
+
+
 
