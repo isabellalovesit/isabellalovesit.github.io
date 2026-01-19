@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Boba Egg Game</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f8e0f0;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #d6336c;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      margin: 10px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .shop, .inventory {
+      margin: 20px auto;
+      border: 2px solid #d6336c;
+      padding: 15px;
+      width: 300px;
+      background: #ffe6f0;
+      border-radius: 10px;
+    }
+
+    .egg {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🍹 Boba Egg Game 🍳</h1>
+
+<p>Money: $<span id="money">30</span></p>
+<p>Boba: <span id="boba">0</span></p>
+
+<button onclick="makeBoba()">Make Boba</button>
+
+<div class="shop">
+  <h2>Buy Eggs 🥚</h2>
+  <button onclick="buyEgg()">Buy Random Egg ($10)</button>
+  <p id="eggMessage"></p>
+</div>
+
+<div class="inventory">
+  <h2>Inventory 🛍️</h2>
+  <ul id="eggList"></ul>
+</div>
+
+<div class="shop">
+  <h2>Sell Boba 💰</h2>
+  <button onclick="sellBoba()">Sell Boba</button>
+</div>
+
+<script>
+  // Player Data
+  let money = 30;
+  let boba = 0;
+  let eggs = [];
+
+  // Egg types
+  const eggTypes = [
+    {name: "Pink Pearl", rarity:"common", min:10, max:50},
+    {name: "Golden Sprinkle", rarity:"uncommon", min:50, max:200},
+    {name: "Mystic Chocolate", rarity:"rare", min:200, max:500},
+    {name: "Dragon Egg", rarity:"legendary", min:1000, max:10000},
+    {name: "Secret Rainbow Egg", rarity:"secret", min:50000, max:1000000},
+    {name: "Bubblegum Delight", rarity:"common", min:10, max:40},
+    {name: "Emerald Cream", rarity:"uncommon", min:60, max:250},
+    {name: "Silver Swirl", rarity:"rare", min:300, max:800},
+    {name: "Phoenix Egg", rarity:"legendary", min:1500, max:20000},
+    {name: "Cosmic Egg", rarity:"secret", min:100000, max:500000},
+    {name: "Caramel Cloud", rarity:"common", min:15, max:45},
+    {name: "Vanilla Star", rarity:"uncommon", min:70, max:230},
+    {name: "Sapphire Egg", rarity:"rare", min:400, max:900},
+    {name: "Unicorn Egg", rarity:"legendary", min:2000, max:30000},
+    {name: "Galactic Egg", rarity:"secret", min:200000, max:600000},
+    {name: "Cocoa Puff", rarity:"common", min:10, max:35},
+    {name: "Ruby Egg", rarity:"uncommon", min:80, max:220},
+    {name: "Mystic Pearl", rarity:"rare", min:500, max:1000},
+    {name: "Titan Egg", rarity:"legendary", min:5000, max:50000},
+    {name: "Hidden Treasure Egg", rarity:"secret", min:300000, max:1000000},
+  ];
+
+  // Functions
+  function updateUI() {
+    document.getElementById("money").textContent = money;
+    document.getElementById("boba").textContent = boba;
+    const eggList = document.getElementById("eggList");
+    eggList.innerHTML = "";
+    eggs.forEach((egg, i) => {
+      const li = document.createElement("li");
+      li.innerHTML = `<span class="egg">${egg.name}</span> (${egg.rarity})`;
+      eggList.appendChild(li);
+    });
+  }
+
+  function makeBoba() {
+    if(eggs.length === 0){
+      alert("You have no eggs! Buy some first!");
+      return;
+    }
+    const randomEgg = eggs[Math.floor(Math.random() * eggs.length)];
+    const amount = Math.floor(Math.random() * (randomEgg.max - randomEgg.min + 1)) + randomEgg.min;
+    boba += amount;
+    alert(`You used ${randomEgg.name} and made ${amount}$ worth of Boba!`);
+    updateUI();
+  }
+
+  function buyEgg() {
+    if(money < 10){
+      alert("Not enough money to buy an egg!");
+      return;
+    }
+    money -= 10;
+    const randomEgg = eggTypes[Math.floor(Math.random() * eggTypes.length)];
+    eggs.push(randomEgg);
+    document.getElementById("eggMessage").textContent = `You got a ${randomEgg.name} (${randomEgg.rarity})!`;
+    updateUI();
+  }
+
+  function sellBoba() {
+    if(boba === 0){
+      alert("You have no Boba to sell!");
+      return;
+    }
+    money += boba;
+    alert(`You sold your Boba for $${boba}!`);
+    boba = 0;
+    updateUI();
+  }
+
+  // Initial UI
+  updateUI();
+</script>
+<button onclick="location.href='index.html'" 
+        style="padding:10px 20px; margin:10px; font-size:18px; border-radius:10px;">
+  ⬅ Back to Home
+</button>
+
+</body>
+</html>
