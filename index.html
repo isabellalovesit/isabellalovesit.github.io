@@ -1,1 +1,59 @@
-test
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Blocks</title>
+  <style>
+    body {
+      background: #87ceeb;
+      text-align: center;
+      font-family: Arial;
+    }
+    canvas {
+      border: 3px solid black;
+      background: #5c9e3f;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🧱 BLOCKS</h1>
+<p>Click blocks to break or place</p>
+
+<canvas id="game" width="400" height="400"></canvas>
+
+<script>
+  const canvas = document.getElementById("game");
+  const ctx = canvas.getContext("2d");
+
+  const size = 40;
+  const rows = 10;
+  const cols = 10;
+
+  let world = Array(rows).fill().map(() => Array(cols).fill(1));
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < cols; x++) {
+        if (world[y][x]) {
+          ctx.fillStyle = "#8b4513";
+          ctx.fillRect(x * size, y * size, size, size);
+        }
+      }
+    }
+  }
+
+  canvas.addEventListener("click", e => {
+    const x = Math.floor(e.offsetX / size);
+    const y = Math.floor(e.offsetY / size);
+    world[y][x] = world[y][x] ? 0 : 1;
+    draw();
+  });
+
+  draw();
+</script>
+
+</body>
+</html>
+
+
