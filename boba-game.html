@@ -1,147 +1,241 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Boba Egg Game</title>
+  <title>Boba Eggs</title>
   <style>
     body {
-      font-family: Arial;
-      background: #f8e0f0;
-      text-align: center;
-      padding: 20px;
+      background:#111;
+      color:white;
+      font-family:monospace;
+      text-align:center;
     }
-
-    h1 {
-      color: #d6336c;
-    }
-
     button {
-      padding: 10px 20px;
-      font-size: 18px;
-      margin: 10px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
+      padding:8px 15px;
+      margin:5px;
+      border-radius:8px;
+      cursor:pointer;
     }
-
-    .shop, .inventory {
-      margin: 20px auto;
-      border: 2px solid #d6336c;
-      padding: 15px;
-      width: 300px;
-      background: #ffe6f0;
-      border-radius: 10px;
+    .box {
+      border:2px solid #555;
+      padding:10px;
+      margin:10px auto;
+      width:440px;
     }
-
-    .egg {
-      font-weight: bold;
+    .list {
+      text-align:left;
+      max-height:120px;
+      overflow-y:auto;
+      border-top:1px solid #444;
+      margin-top:5px;
+      padding-top:5px;
     }
   </style>
 </head>
 <body>
 
-<h1>🍹 Boba Egg Game 🍳</h1>
+<h1>🧋 BOBA EGGS</h1>
+<p id="money"></p>
 
-<p>Money: $<span id="money">30</span></p>
-<p>Boba: <span id="boba">0</span></p>
-
-<button onclick="makeBoba()">Make Boba</button>
-
-<div class="shop">
-  <h2>Buy Eggs 🥚</h2>
-  <button onclick="buyEgg()">Buy Random Egg ($10)</button>
-  <p id="eggMessage"></p>
+<div class="box">
+  <h3>🥚 Buy Eggs</h3>
+  <button onclick="buyEgg()">Buy Egg ($<span id="eggPrice"></span>)</button>
 </div>
 
-<div class="inventory">
-  <h2>Inventory 🛍️</h2>
-  <ul id="eggList"></ul>
+<div class="box">
+  <h3>🎒 Egg Inventory</h3>
+  <div id="eggList" class="list"></div>
 </div>
 
-<div class="shop">
-  <h2>Sell Boba 💰</h2>
+<div class="box">
+  <h3>🧋 Boba Inventory</h3>
+  <div id="bobaList" class="list"></div>
+</div>
+
+<div class="box">
+  <h3>⚙️ Actions</h3>
+  <button onclick="makeBoba()">Make Boba</button>
   <button onclick="sellBoba()">Sell Boba</button>
 </div>
 
+<div class="box">
+  <h3>🆙 Upgrades</h3>
+  <button onclick="buyUpgrade('doubleMoney')">Double Money ($200)</button>
+  <button onclick="buyUpgrade('cheapEggs')">Cheaper Eggs ($150)</button>
+</div>
+
+<div class="box">
+  <h3>🔐 Secret Codes</h3>
+  <button onclick="enterCode()">Enter Code</button>
+</div>
+
+<div class="box">
+  <h3>📜 Log</h3>
+  <p id="log"></p>
+</div>
+
 <script>
-  // Player Data
-  let money = 30;
-  let boba = 0;
-  let eggs = [];
+// ===== SAVE SYSTEM =====
+function saveGame() {
+  localStorage.setItem("bobaSave", JSON.stringify(game));
+}
+function loadGame() {
+  const save = localStorage.getItem("bobaSave");
+  if (save) game = JSON.parse(save);
+}
 
-  // Egg types
-  const eggTypes = [
-    {name: "Pink Pearl", rarity:"common", min:10, max:50},
-    {name: "Golden Sprinkle", rarity:"uncommon", min:50, max:200},
-    {name: "Mystic Chocolate", rarity:"rare", min:200, max:500},
-    {name: "Dragon Egg", rarity:"legendary", min:1000, max:10000},
-    {name: "Secret Rainbow Egg", rarity:"secret", min:50000, max:1000000},
-    {name: "Bubblegum Delight", rarity:"common", min:10, max:40},
-    {name: "Emerald Cream", rarity:"uncommon", min:60, max:250},
-    {name: "Silver Swirl", rarity:"rare", min:300, max:800},
-    {name: "Phoenix Egg", rarity:"legendary", min:1500, max:20000},
-    {name: "Cosmic Egg", rarity:"secret", min:100000, max:500000},
-    {name: "Caramel Cloud", rarity:"common", min:15, max:45},
-    {name: "Vanilla Star", rarity:"uncommon", min:70, max:230},
-    {name: "Sapphire Egg", rarity:"rare", min:400, max:900},
-    {name: "Unicorn Egg", rarity:"legendary", min:2000, max:30000},
-    {name: "Galactic Egg", rarity:"secret", min:200000, max:600000},
-    {name: "Cocoa Puff", rarity:"common", min:10, max:35},
-    {name: "Ruby Egg", rarity:"uncommon", min:80, max:220},
-    {name: "Mystic Pearl", rarity:"rare", min:500, max:1000},
-    {name: "Titan Egg", rarity:"legendary", min:5000, max:50000},
-    {name: "Hidden Treasure Egg", rarity:"secret", min:300000, max:1000000},
-  ];
-
-  // Functions
-  function updateUI() {
-    document.getElementById("money").textContent = money;
-    document.getElementById("boba").textContent = boba;
-    const eggList = document.getElementById("eggList");
-    eggList.innerHTML = "";
-    eggs.forEach((egg, i) => {
-      const li = document.createElement("li");
-      li.innerHTML = `<span class="egg">${egg.name}</span> (${egg.rarity})`;
-      eggList.appendChild(li);
-    });
+// ===== GAME DATA =====
+let game = {
+  money: 30,
+  eggs: [],
+  boba: [],
+  upgrades: {
+    doubleMoney: false,
+    cheapEggs: false
   }
+};
 
-  function makeBoba() {
-    if(eggs.length === 0){
-      alert("You have no eggs! Buy some first!");
-      return;
+loadGame();
+
+// ===== EGG POOLS =====
+const eggPools = {
+  Common: {
+    chance: 45, value: 10,
+    names: ["Milk Pearl Egg","Sweet Tea Egg","Starter Boba Egg"]
+  },
+  Uncommon: {
+    chance: 25, value: 50,
+    names: ["Honey Pearl Egg","Brown Sugar Egg"]
+  },
+  Rare: {
+    chance: 18, value: 500,
+    names: ["Galaxy Pearl Egg","Moonlight Boba Egg"]
+  },
+  Legendary: {
+    chance: 10, value: 5000,
+    names: ["Golden Dragon Egg","Ancient Pearl Egg"]
+  },
+  Secret: {
+    chance: 2, value: 1000000,
+    names: ["VOID BOBA EGG"]
+  }
+};
+
+// ===== SECRET EGGS =====
+const secretEggs = {
+  blahblahblah: {
+    name: "💖 LOVE EGG",
+    rarity: "SECRET",
+    value: 500000,
+    pets: ["Cupid Cat","Heart Dragon"]
+  },
+  stardust: {
+    name: "✨ STARDUST EGG",
+    rarity: "SECRET",
+    value: 750000,
+    pets: ["Galaxy Fox","Nebula Serpent"]
+  }
+};
+
+// ===== UI =====
+function updateUI() {
+  document.getElementById("money").textContent = `Money: $${game.money}`;
+  document.getElementById("eggPrice").textContent = game.upgrades.cheapEggs ? 5 : 10;
+
+  document.getElementById("eggList").innerHTML =
+    game.eggs.length ? game.eggs.map(e =>
+      `🥚 ${e.name} (${e.rarity})`
+    ).join("<br>") : "No eggs";
+
+  document.getElementById("bobaList").innerHTML =
+    game.boba.length ? game.boba.map(b =>
+      `🧋 ${b.name} - $${b.value}`
+    ).join("<br>") : "No boba";
+}
+
+function log(text) {
+  document.getElementById("log").textContent = text;
+}
+
+// ===== GAMEPLAY =====
+function buyEgg() {
+  const price = game.upgrades.cheapEggs ? 5 : 10;
+  if (game.money < price) return log("❌ Not enough money");
+  game.money -= price;
+
+  let roll = Math.random() * 100;
+  let total = 0;
+
+  for (let r in eggPools) {
+    total += eggPools[r].chance;
+    if (roll <= total) {
+      const pool = eggPools[r];
+      const name = pool.names[Math.floor(Math.random() * pool.names.length)];
+      game.eggs.push({ name, rarity: r, value: pool.value });
+      log(`🥚 You got ${name}`);
+      break;
     }
-    const randomEgg = eggs[Math.floor(Math.random() * eggs.length)];
-    const amount = Math.floor(Math.random() * (randomEgg.max - randomEgg.min + 1)) + randomEgg.min;
-    boba += amount;
-    alert(`You used ${randomEgg.name} and made ${amount}$ worth of Boba!`);
-    updateUI();
   }
-
-  function buyEgg() {
-    if(money < 10){
-      alert("Not enough money to buy an egg!");
-      return;
-    }
-    money -= 10;
-    const randomEgg = eggTypes[Math.floor(Math.random() * eggTypes.length)];
-    eggs.push(randomEgg);
-    document.getElementById("eggMessage").textContent = `You got a ${randomEgg.name} (${randomEgg.rarity})!`;
-    updateUI();
-  }
-
-  function sellBoba() {
-    if(boba === 0){
-      alert("You have no Boba to sell!");
-      return;
-    }
-    money += boba;
-    alert(`You sold your Boba for $${boba}!`);
-    boba = 0;
-    updateUI();
-  }
-
-  // Initial UI
+  saveGame();
   updateUI();
+}
+
+function makeBoba() {
+  if (!game.eggs.length) return log("❌ No eggs");
+  const egg = game.eggs.pop();
+  game.boba.push(egg);
+  log(`🧋 Made boba from ${egg.name}`);
+  saveGame();
+  updateUI();
+}
+
+function sellBoba() {
+  if (!game.boba.length) return log("❌ No boba");
+  const item = game.boba.pop();
+  let value = item.value;
+  if (game.upgrades.doubleMoney) value *= 2;
+  game.money += value;
+  log(`💰 Sold ${item.name} for $${value}`);
+  saveGame();
+  updateUI();
+}
+
+// ===== UPGRADES =====
+function buyUpgrade(type) {
+  if (type === "doubleMoney" && !game.upgrades.doubleMoney && game.money >= 200) {
+    game.money -= 200;
+    game.upgrades.doubleMoney = true;
+    log("🆙 Double Money unlocked!");
+  }
+  if (type === "cheapEggs" && !game.upgrades.cheapEggs && game.money >= 150) {
+    game.money -= 150;
+    game.upgrades.cheapEggs = true;
+    log("🆙 Cheaper Eggs unlocked!");
+  }
+  saveGame();
+  updateUI();
+}
+
+// ===== SECRET CODES =====
+function enterCode() {
+  const code = prompt("Enter secret code:");
+  if (!code) return;
+
+  const egg = secretEggs[code.toLowerCase()];
+  if (!egg) return log("❌ Invalid code");
+
+  game.eggs.push({
+    name: egg.name + " (Pets: " + egg.pets.join(", ") + ")",
+    rarity: egg.rarity,
+    value: egg.value
+  });
+
+  log(`🔐 SECRET! You got ${egg.name}`);
+  saveGame();
+  updateUI();
+}
+
+updateUI();
+log("Game loaded!");
 </script>
 <button onclick="location.href='index.html'" 
         style="padding:10px 20px; margin:10px; font-size:18px; border-radius:10px;">
@@ -150,3 +244,4 @@
 
 </body>
 </html>
+
