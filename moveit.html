@@ -1,50 +1,172 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Move It Ultimate 3D</title>
+  <title>Move It</title>
   <style>
-    body { margin:0; overflow:hidden; background:#111; font-family:Arial; }
-    #ui {
-      position:absolute;
-      top:0; left:0; width:100%;
-      text-align:center;
+    body {
+      background:#111;
       color:white;
-      z-index:10;
+      font-family:Arial;
+      text-align:center;
     }
-    #message { font-size:22px; margin-top:10px; }
+    canvas {
+      background:#222;
+      border:4px solid white;
+      margin-top:10px;
+    }
     button {
+      margin-top:10px;
       padding:10px 20px;
-      margin:5px;
       font-size:16px;
       border-radius:10px;
       cursor:pointer;
     }
   </style>
 </head>
-  <button onclick="location.href='index.html'" 
+<body>
+
+<h1>🎮 MOVE IT</h1>
+<p>W A S D to move • Collect all the orbs</p>
+<p id="info">Level 1 | Orbs: 0</p>
+
+<canvas id="game" width="500" height="400"></canvas><br>
+<button onclick="restart()">Restart Game</button>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+let level = 1;
+const maxLevel = 5;
+
+let player = { x: 240, y: 180, size: 20, speed: 3 };
+let keys = {};
+let collected = 0;
+let secretPresses = 0;
+let orbs = [];
+
+function createOrbs() {
+  orbs = [];
+  let orbCount = level * 5;
+  for (let i = 0; i < orbCount; i++) {
+    orbs.push({
+      x: Math.random() * 460,
+      y: Math.random() * 360,
+      size: 10
+    });
+  }
+  collected = 0;
+  updateInfo();
+}
+
+createOrbs();
+
+document.addEventListener("keydown", e => {
+  keys[e.key.toLowerCase()] = true;
+
+  if (e.key.toLowerCase() === "o") {
+    secretPresses++;
+    if (secretPresses === 2) {
+      secretPresses = 0;
+      let code = prompt("Enter secret code:");
+      if (code === "thegreat") {
+        collected += 10;
+        updateInfo();
+        alert("🔥 SECRET CODE ACTIVATED!");
+      } else {
+        alert("Wrong code!");
+      }
+    }
+  }
+});
+
+document.addEventListener("keyup", e => {
+  keys[e.key.toLowerCase()] = false;
+});
+
+function update() {
+  if (keys["w"]) player.y -= player.speed;
+  if (keys["s"]) player.y += player.speed;
+  if (keys["a"]) player.x -= player.speed;
+  if (keys["d"]) player.x += player.speed;
+
+  player.x = Math.max(0, Math.min(canvas.width - player.size, player.x));
+  player.y = Math.max(0, Math.min(canvas.height - player.size, player.y));
+
+  for (let i = orbs.length - 1; i >= 0; i--) {
+    let o = orbs[i];
+    if (
+      player.x < o.x + o.size &&
+      player.x + player.size > o.x &&
+      player.y < o.y + o.size &&
+      player.y + player.size > o.y
+    ) {
+      orbs.splice(i, 1);
+      collected++;
+      updateInfo();
+    }
+  }
+
+  if (orbs.length === 0) {
+    nextLevel();
+  }
+}
+
+function nextLevel() {
+  if (level < maxLevel) {
+    level++;
+    player.speed += 0.5;
+    player.x = 240;
+    player.y = 180;
+    createOrbs();
+  } else {
+    document.getElementById("info").textContent =
+      "🎉 YAYY YOU DID IT! NOW PLAY AGAING HeHeHeH 🎉";
+  }
+}
+
+function updateInfo() {
+  document.getElementById("info").textContent =
+    `Level ${level} | Orbs: ${collected}`;
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Player
+  ctx.fillStyle = "#00ffff";
+  ctx.fillRect(player.x, player.y, player.size, player.size);
+
+  // Orbs
+  ctx.fillStyle = "yellow";
+  orbs.forEach(o => {
+    ctx.beginPath();
+    ctx.arc(o.x, o.y, o.size, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+function gameLoop() {
+  update();
+  draw();
+  requestAnimationFrame(gameLoop);
+}
+
+function restart() {
+  level = 1;
+  player.speed = 3;
+  player.x = 240;
+  player.y = 180;
+  createOrbs();
+}
+
+gameLoop();
+</script>
+<button onclick="location.href='index.html'" 
         style="padding:10px 20px; margin:10px; font-size:18px; border-radius:10px;">
   ⬅ Back to Home
 </button>
 
-<body>
-<div id="ui">
-  <h1>🎯 Move It Ultimate</h1>
-  <p>Use W/A/S/D to move. Collect all orbs!</p>
-  <div id="message">Orbs collected: 0</div>
-  <button onclick="restartLevel()">Restart Level</button>
-</div>
+</body>
+</html>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
-<script>
-// ====== Scene ======
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x222222);
-
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({antialias:true});
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
-
-// ====== Lights ======
-scene.add(new THREE.AmbientLight(0xffffff,0.6));
-const light = new THREE.DirectionalLight(0xff
