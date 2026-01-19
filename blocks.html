@@ -1,63 +1,106 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Blocks</title>
+  <title>BLOCKS 10x10 Editor</title>
   <style>
     body {
-      background: #87ceeb;
+      background: radial-gradient(circle, #0b0015, #000);
+      color: #d6b3ff;
+      font-family: monospace;
       text-align: center;
-      font-family: Arial;
+      padding-top: 20px;
     }
-    canvas {
-      border: 3px solid black;
-      background: #5c9e3f;
+
+    h1 { text-shadow: 0 0 15px #8f3bff; }
+
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(10, 40px);
+      grid-template-rows: repeat(10, 40px);
+      gap: 2px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .cell {
+      width: 40px;
+      height: 40px;
+      border: 1px solid #4b0082;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #1a002a;
+    }
+
+    #colors {
+      margin-top: 20px;
+    }
+
+    .colorBtn {
+      width: 40px;
+      height: 40px;
+      border: 2px solid #8f3bff;
+      border-radius: 6px;
+      display: inline-block;
+      margin: 5px;
+      cursor: pointer;
+      box-shadow: 0 0 8px #4b0082;
+    }
+
+    .colorBtn.selected {
+      border: 3px solid #ffd700;
+      box-shadow: 0 0 15px #ffd700;
     }
   </style>
 </head>
 <body>
 
-<h1>🧱 BLOCKS</h1>
-<p>Click blocks to break or place</p>
+<h1>🌌 BLOCKS 10x10 🌌</h1>
+<p>Click a cell to place a block. Pick a color first!</p>
 
-<canvas id="game" width="400" height="400"></canvas>
+<div id="colors">
+  <div class="colorBtn" style="background:#4b0082;" onclick="selectColor('#4b0082')"></div>
+  <div class="colorBtn" style="background:#0055ff;" onclick="selectColor('#0055ff')"></div>
+  <div class="colorBtn" style="background:#ff33aa;" onclick="selectColor('#ff33aa')"></div>
+  <div class="colorBtn" style="background:#ffd700;" onclick="selectColor('#ffd700')"></div>
+  <div class="colorBtn" style="background:#00ffff;" onclick="selectColor('#00ffff')"></div>
+</div>
+
+<div id="grid"></div>
 
 <script>
-  const canvas = document.getElementById("game");
-  const ctx = canvas.getContext("2d");
+const gridSize = 10;
+let selectedColor = "#4b0082";
 
-  const size = 40;
-  const rows = 10;
-  const cols = 10;
+// ==== Create Grid ====
+const gridContainer = document.getElementById("grid");
+for (let i=0;i<gridSize*gridSize;i++){
+  const cell = document.createElement("div");
+  cell.className = "cell";
+  cell.onclick = () => {
+    cell.style.backgroundColor = selectedColor;
+  };
+  gridContainer.appendChild(cell);
+}
 
-  let world = Array(rows).fill().map(() => Array(cols).fill(1));
-
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let y = 0; y < rows; y++) {
-      for (let x = 0; x < cols; x++) {
-        if (world[y][x]) {
-          ctx.fillStyle = "#8b4513";
-          ctx.fillRect(x * size, y * size, size, size);
-        }
-      }
-    }
-  }
-
-  canvas.addEventListener("click", e => {
-    const x = Math.floor(e.offsetX / size);
-    const y = Math.floor(e.offsetY / size);
-    world[y][x] = world[y][x] ? 0 : 1;
-    draw();
-  });
-
-  draw();
+// ==== Color selection ====
+function selectColor(color){
+  selectedColor = color;
+  document.querySelectorAll(".colorBtn").forEach(btn => btn.classList.remove("selected"));
+  event.target.classList.add("selected");
+}
 </script>
 <button onclick="location.href='index.html'" 
         style="padding:10px 20px; margin:10px; font-size:18px; border-radius:10px;">
   ⬅ Back to Home
 </button>
+
 </body>
 </html>
+
+
 
 
 
