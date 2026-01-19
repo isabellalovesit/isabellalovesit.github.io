@@ -6,18 +6,30 @@
     body {
       background:#111;
       color:white;
-      font-family:Arial;
+      font-family:monospace;
       text-align:center;
     }
-    canvas {
-      background:#222;
-      border:4px solid white;
-      margin-top:10px;
+    #grid {
+      display:grid;
+      grid-template-columns: repeat(10, 40px);
+      gap:4px;
+      justify-content:center;
+      margin-top:20px;
     }
+    .cell {
+      width:40px;
+      height:40px;
+      border:1px solid #555;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:20px;
+    }
+    .player { background:#00ffff; color:black; }
+    .orb { background:gold; color:black; }
     button {
-      margin-top:10px;
+      margin-top:15px;
       padding:10px 20px;
-      font-size:16px;
       border-radius:10px;
       cursor:pointer;
     }
@@ -25,142 +37,114 @@
 </head>
 <body>
 
-<h1>🎮 MOVE IT</h1>
-<p>W A S D to move • Collect all the orbs</p>
-<p id="info">Level 1 | Orbs: 0</p>
+<h1>MOVE IT</h1>
+<p>W A S D to move • Collect all orbs</p>
+<p id="info">Level 1 | Orbs left: 0</p>
 
-<canvas id="game" width="500" height="400"></canvas><br>
-<button onclick="restart()">Restart Game</button>
+<div id="grid"></div>
+
+<button onclick="restart()">Restart</button>
 
 <script>
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
-
+const size = 10;
 let level = 1;
 const maxLevel = 5;
-
-let player = { x: 240, y: 180, size: 20, speed: 3 };
-let keys = {};
-let collected = 0;
-let secretPresses = 0;
+let player = { x: 0, y: 0 };
 let orbs = [];
+let oPress = 0;
 
-function createOrbs() {
-  orbs = [];
-  let orbCount = level * 5;
-  for (let i = 0; i < orbCount; i++) {
-    orbs.push({
-      x: Math.random() * 460,
-      y: Math.random() * 360,
-      size: 10
-    });
-  }
-  collected = 0;
-  updateInfo();
+function randomPos() {
+  return Math.floor(Math.random() * size);
 }
 
-createOrbs();
+function createLevel() {
+  orbs = [];
+  player.x = 0;
+  player.y = 0;
+
+  let orbCount = level + 2;
+  for (let i = 0; i < orbCount; i++) {
+    orbs.push({ x: randomPos(), y: randomPos() });
+  }
+  updateInfo();
+  draw();
+}
+
+function updateInfo() {
+  document.getElementById("info").textContent =
+    `Level ${level} | Orbs left: ${orbs.length}`;
+}
+
+function draw() {
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const cell = document.createElement("div");
+      cell.className = "cell";
+
+      if (player.x === x && player.y === y) {
+        cell.classList.add("player");
+        cell.textContent = "P";
+      }
+
+      orbs.forEach(o => {
+        if (o.x === x && o.y === y) {
+          cell.classList.add("orb");
+          cell.textContent = "O";
+        }
+      });
+
+      grid.appendChild(cell);
+    }
+  }
+}
 
 document.addEventListener("keydown", e => {
-  keys[e.key.toLowerCase()] = true;
+  const key = e.key.toLowerCase();
 
-  if (e.key.toLowerCase() === "o") {
-    secretPresses++;
-    if (secretPresses === 2) {
-      secretPresses = 0;
+  if (key === "w" && player.y > 0) player.y--;
+  if (key === "s" && player.y < size - 1) player.y++;
+  if (key === "a" && player.x > 0) player.x--;
+  if (key === "d" && player.x < size - 1) player.x++;
+
+  if (key === "o") {
+    oPress++;
+    if (oPress === 2) {
+      oPress = 0;
       let code = prompt("Enter secret code:");
       if (code === "thegreat") {
-        collected += 10;
-        updateInfo();
-        alert("🔥 SECRET CODE ACTIVATED!");
+        orbs.splice(0, orbs.length - 1);
+        alert("SECRET UNLOCKED!");
       } else {
         alert("Wrong code!");
       }
     }
   }
-});
 
-document.addEventListener("keyup", e => {
-  keys[e.key.toLowerCase()] = false;
-});
+  orbs = orbs.filter(o => !(o.x === player.x && o.y === player.y));
 
-function update() {
-  if (keys["w"]) player.y -= player.speed;
-  if (keys["s"]) player.y += player.speed;
-  if (keys["a"]) player.x -= player.speed;
-  if (keys["d"]) player.x += player.speed;
-
-  player.x = Math.max(0, Math.min(canvas.width - player.size, player.x));
-  player.y = Math.max(0, Math.min(canvas.height - player.size, player.y));
-
-  for (let i = orbs.length - 1; i >= 0; i--) {
-    let o = orbs[i];
-    if (
-      player.x < o.x + o.size &&
-      player.x + player.size > o.x &&
-      player.y < o.y + o.size &&
-      player.y + player.size > o.y
-    ) {
-      orbs.splice(i, 1);
-      collected++;
-      updateInfo();
+  if (orbs.length === 0) {
+    if (level < maxLevel) {
+      level++;
+      createLevel();
+    } else {
+      document.getElementById("info").textContent =
+        "🎉 YAYY YOU DID IT! NOW PLAY AGAING HeHeHeH 🎉";
     }
   }
 
-  if (orbs.length === 0) {
-    nextLevel();
-  }
-}
-
-function nextLevel() {
-  if (level < maxLevel) {
-    level++;
-    player.speed += 0.5;
-    player.x = 240;
-    player.y = 180;
-    createOrbs();
-  } else {
-    document.getElementById("info").textContent =
-      "🎉 YAYY YOU DID IT! NOW PLAY AGAING HeHeHeH 🎉";
-  }
-}
-
-function updateInfo() {
-  document.getElementById("info").textContent =
-    `Level ${level} | Orbs: ${collected}`;
-}
-
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Player
-  ctx.fillStyle = "#00ffff";
-  ctx.fillRect(player.x, player.y, player.size, player.size);
-
-  // Orbs
-  ctx.fillStyle = "yellow";
-  orbs.forEach(o => {
-    ctx.beginPath();
-    ctx.arc(o.x, o.y, o.size, 0, Math.PI * 2);
-    ctx.fill();
-  });
-}
-
-function gameLoop() {
-  update();
+  updateInfo();
   draw();
-  requestAnimationFrame(gameLoop);
-}
+});
 
 function restart() {
   level = 1;
-  player.speed = 3;
-  player.x = 240;
-  player.y = 180;
-  createOrbs();
+  createLevel();
 }
 
-gameLoop();
+createLevel();
 </script>
 <button onclick="location.href='index.html'" 
         style="padding:10px 20px; margin:10px; font-size:18px; border-radius:10px;">
@@ -170,3 +154,5 @@ gameLoop();
 </body>
 </html>
 
+
+ 
