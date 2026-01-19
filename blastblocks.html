@@ -3,38 +3,131 @@
 <head>
   <title>Blast Blocks</title>
   <style>
-    body { text-align: center; font-family: Arial; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(6, 50px);
-      gap: 5px;
-      justify-content: center;
+    body {
+      background: radial-gradient(circle, #1a002a, #000);
+      color: #e0b3ff;
+      font-family: monospace;
+      text-align: center;
+      padding-top: 40px;
     }
-    .block {
-      width: 50px;
-      height: 50px;
-      background: red;
+
+    h1 {
+      text-shadow: 0 0 15px #9b4dff;
+    }
+
+    button {
+      background: black;
+      color: #e0b3ff;
+      border: 2px solid #9b4dff;
+      padding: 12px 18px;
+      border-radius: 10px;
       cursor: pointer;
+      margin: 6px;
+      box-shadow: 0 0 10px #6a00ff;
+    }
+
+    button:hover {
+      box-shadow: 0 0 25px #b266ff;
+      transform: scale(1.08);
+    }
+
+    .box {
+      border: 2px solid #4b0082;
+      width: 420px;
+      margin: auto;
+      padding: 15px;
+      background: rgba(0,0,0,0.6);
+      border-radius: 15px;
+      box-shadow: 0 0 25px #4b0082;
+    }
+
+    .block {
+      margin: 6px;
+      padding: 10px;
+      border: 1px dashed #9b4dff;
     }
   </style>
 </head>
 <body>
 
-<h1>💥 Blast Blocks</h1>
-<p>Click blocks to destroy them</p>
+<h1>💥 BLAST BLOCKS 💥</h1>
+<p>Abstract Mode (Not 2D • Not 3D)</p>
 
-<div class="grid" id="grid"></div>
+<div class="box">
+  <p id="score">Score: 0</p>
+  <p id="combo">Combo: 0</p>
+  <p id="energy">Energy: 5</p>
+
+  <div id="blocks"></div>
+
+  <button onclick="blast()">BLAST</button>
+  <button onclick="charge()">CHARGE</button>
+</div>
+
+<p id="log">Click BLAST to destroy blocks.</p>
 
 <script>
-  const grid = document.getElementById("grid");
+let score = 0;
+let combo = 0;
+let energy = 5;
 
-  for (let i = 0; i < 36; i++) {
-    const block = document.createElement("div");
-    block.className = "block";
-    block.style.background = `hsl(${Math.random()*360},80%,60%)`;
-    block.onclick = () => block.remove();
-    grid.appendChild(block);
+let blockTypes = [
+  { name: "Void Block", points: 10 },
+  { name: "Pulse Block", points: 25 },
+  { name: "Chaos Block", points: 50 },
+  { name: "Core Block", points: 100 }
+];
+
+function spawnBlocks() {
+  const container = document.getElementById("blocks");
+  container.innerHTML = "";
+
+  for (let i = 0; i < 3; i++) {
+    const block = blockTypes[Math.floor(Math.random() * blockTypes.length)];
+    const div = document.createElement("div");
+    div.className = "block";
+    div.textContent = block.name;
+    div.dataset.points = block.points;
+    container.appendChild(div);
   }
+}
+
+function blast() {
+  if (energy <= 0) {
+    document.getElementById("log").textContent = "❌ No energy!";
+    return;
+  }
+
+  energy--;
+  combo++;
+
+  let destroyed = document.querySelectorAll(".block");
+  destroyed.forEach(b => {
+    score += Number(b.dataset.points) * combo;
+  });
+
+  document.getElementById("log").textContent =
+    `💥 BLAST! Combo x${combo}!`;
+
+  spawnBlocks();
+  updateUI();
+}
+
+function charge() {
+  energy++;
+  combo = 0;
+  document.getElementById("log").textContent = "⚡ Energy charged. Combo reset.";
+  updateUI();
+}
+
+function updateUI() {
+  document.getElementById("score").textContent = "Score: " + score;
+  document.getElementById("combo").textContent = "Combo: " + combo;
+  document.getElementById("energy").textContent = "Energy: " + energy;
+}
+
+spawnBlocks();
+updateUI();
 </script>
 <button onclick="location.href='index.html'" 
         style="padding:10px 20px; margin:10px; font-size:18px; border-radius:10px;">
@@ -43,5 +136,7 @@
 
 </body>
 </html>
+
+
 
 
