@@ -1,46 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Isabella's Webpage</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
-            background-color: #f0f0f0;
-        }
-        h1, p {
-            color: #333;
-        }
-        button {
-            margin: 10px;
-            padding: 15px 25px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            background-color: #4CAF50;
-            color: white;
-            transition: background 0.3s;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
+  <title>ISABELLAS COOL GAMES</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: radial-gradient(circle at top, #2b0040, #050008, #000);
+      font-family: monospace;
+      color: #d6b3ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* floating void particles */
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(#6a00ff 1px, transparent 1px),
+        radial-gradient(#3a0066 1px, transparent 1px);
+      background-size: 80px 80px, 120px 120px;
+      animation: drift 30s linear infinite;
+      opacity: 0.35;
+    }
+
+    @keyframes drift {
+      from { background-position: 0 0, 0 0; }
+      to { background-position: 500px 500px, -500px -500px; }
+    }
+
+    .menu {
+      position: relative;
+      text-align: center;
+      z-index: 1;
+      padding: 30px;
+      border-radius: 20px;
+      background: rgba(0,0,0,0.6);
+      box-shadow: 0 0 40px #4b0082;
+    }
+
+    h1 {
+      margin-bottom: 25px;
+      font-size: 40px;
+      text-shadow: 0 0 15px #8f3bff;
+    }
+
+    button {
+      display: block;
+      width: 260px;
+      margin: 15px auto;
+      padding: 15px;
+      font-size: 18px;
+      background: black;
+      color: #d6b3ff;
+      border: 2px solid #8f3bff;
+      border-radius: 14px;
+      cursor: pointer;
+      box-shadow: 0 0 12px #6a00ff;
+      transition: all 0.25s ease;
+    }
+
+    button:hover {
+      box-shadow: 0 0 25px #b266ff;
+      transform: scale(1.06);
+    }
+  </style>
 </head>
 <body>
-    <p>Isabella's Webpage</p>
 
-    <button onclick="window.open('blocks.html', '_blank')">Blocks Game</button>
-    <button onclick="window.open('blockschat.html', '_blank')">Blocks Chat</button>
-    <button onclick="window.open('blastblocks.html', '_blank')">Block Blast</button>
-    <button onclick="window.open('thanks.html', '_blank')">Special Thanks</button>
-    <button onclick="window.open('https://maxgames.org', '_blank')">maxs wedsite fun games and more</button>
-    <button onclick="window.open('coolgames.html', '_blank')">cool gameeeee</button>
-    <button onclick="window.open('moveit.html', '_blank')">MOVE IT</button>
-</body>
-</html>
+<div class="menu">
+  <h1>🌌 ISABELLAS COOL GAMES 🌌</h1>
+
+  <button onclick="location.href='move-it.html'">MOVE IT</button>
+  <button onclick="location.href='boba-game.html'">BOBA EGGS</button>
+  <button onclick="location.href='blast-blocks.html'">BLAST BLOCKS</button>
+  <button onclick="location.href='blocks.html'">BLOCKS</button>
+  <button onclick="location.href='chat.html'">BLOCKS CHAT</button>
+ <button onclick="location.href='http.maxgames.org'">MAXS GAMES</button>
+  
+
+
 
 
 
