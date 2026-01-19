@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Move It Ultimate 3D</title>
+  <style>
+    body { margin:0; overflow:hidden; background:#111; font-family:Arial; }
+    #ui {
+      position:absolute;
+      top:0; left:0; width:100%;
+      text-align:center;
+      color:white;
+      z-index:10;
+    }
+    #message { font-size:22px; margin-top:10px; }
+    button {
+      padding:10px 20px;
+      margin:5px;
+      font-size:16px;
+      border-radius:10px;
+      cursor:pointer;
+    }
+  </style>
+</head>
+  <button onclick="location.href='index.html'" 
+        style="padding:10px 20px; margin:10px; font-size:18px; border-radius:10px;">
+  ⬅ Back to Home
+</button>
+
+<body>
+<div id="ui">
+  <h1>🎯 Move It Ultimate</h1>
+  <p>Use W/A/S/D to move. Collect all orbs!</p>
+  <div id="message">Orbs collected: 0</div>
+  <button onclick="restartLevel()">Restart Level</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+<script>
+// ====== Scene ======
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x222222);
+
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+// ====== Lights ======
+scene.add(new THREE.AmbientLight(0xffffff,0.6));
+const light = new THREE.DirectionalLight(0xff
