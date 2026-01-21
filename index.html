@@ -1,92 +1,91 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ISABELLAS COOL GAMES</title>
+  <title>🌌 isabellas cool games!!! 🌌</title>
+
   <style>
     body {
       margin: 0;
       height: 100vh;
-      background: radial-gradient(circle at top, #2b0040, #050008, #000);
+      background: radial-gradient(circle at top, #1a0033, #000);
       font-family: monospace;
       color: #d6b3ff;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
+      justify-content: center;
       overflow: hidden;
     }
 
-    /* floating void particles */
-    body::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image:
-        radial-gradient(#6a00ff 1px, transparent 1px),
-        radial-gradient(#3a0066 1px, transparent 1px);
-      background-size: 80px 80px, 120px 120px;
-      animation: drift 30s linear infinite;
-      opacity: 0.35;
-    }
-
-    @keyframes drift {
-      from { background-position: 0 0, 0 0; }
-      to { background-position: 500px 500px, -500px -500px; }
-    }
-
-    .menu {
-      position: relative;
-      text-align: center;
-      z-index: 1;
-      padding: 30px;
-      border-radius: 20px;
-      background: rgba(0,0,0,0.6);
-      box-shadow: 0 0 40px #4b0082;
-    }
-
     h1 {
-      margin-bottom: 25px;
-      font-size: 40px;
-      text-shadow: 0 0 15px #8f3bff;
+      font-size: 42px;
+      text-shadow: 0 0 20px #8f3bff;
+      margin-bottom: 40px;
     }
 
-    button {
-      display: block;
+    .btn {
       width: 260px;
-      margin: 15px auto;
       padding: 15px;
-      font-size: 18px;
+      margin: 10px;
+      font-size: 20px;
       background: black;
       color: #d6b3ff;
       border: 2px solid #8f3bff;
       border-radius: 14px;
       cursor: pointer;
       box-shadow: 0 0 12px #6a00ff;
-      transition: all 0.25s ease;
+      transition: 0.2s;
     }
 
-    button:hover {
+    .btn:hover {
+      transform: scale(1.05);
       box-shadow: 0 0 25px #b266ff;
-      transform: scale(1.06);
+    }
+
+    .void {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: purple;
+      opacity: 0.6;
+      animation: float 10s linear infinite;
+    }
+
+    @keyframes float {
+      from { transform: translateY(100vh); }
+      to { transform: translateY(-10vh); }
     }
   </style>
 </head>
+
 <body>
 
-<div class="menu">
-  <h1>🌌 ISABELLAS COOL GAMES 🌌</h1>
+  <!-- 🌌 PAGE CONTENT 🌌 -->
 
-  <button onclick="location.href='moveit.html'">MOVE IT</button>
-  <button onclick="location.href='boba-game.html'">BOBA EGGS</button>
-  <button onclick="location.href='blastblocks.html'">BLAST BLOCKS</button>
-  <button onclick="location.href='blocks.html'">BLOCKS</button>
-  <button onclick="location.href='blockschat.html'">BLOCKS CHAT</button>
- <button onclick="location.href='https://maxgames.org'">MAXS GAMES</button>
-   <button onclick="location.href='thanks.html'">THANKS</button>
-     <button onclick="location.href='https://www.youtube.com/@Isabellamccain-3520'">isabellaplays</button>
-  </div>
+  <h1>WELCOME TO ISABELLAS COOL GAMES!!!!!!</h1>
+
+  <button class="btn" onclick="location.href='blocks.html'">Blocks</button>
+  <button class="btn" onclick="location.href='blastblocks.html'">Blast Blocks</button>
+  <button class="btn" onclick="location.href='boba.html'">Boba Eggs</button>
+  <button class="btn" onclick="location.href='blockschat.html'">Blocks Chat</button>
+  <button class="btn" onclick="window.open('https://www.youtube.com/@Isabellamccain-3520','_blank')">My YouTube</button>
+   <button class="btn" onclick="window.open('thanks.html','_blank')">thanks</button>
+
+
+  <!-- 🌌 VOID PARTICLES 🌌 -->
+  <script>
+    for (let i = 0; i < 60; i++) {
+      const v = document.createElement("div");
+      v.className = "void";
+      v.style.left = Math.random() * 100 + "vw";
+      v.style.animationDuration = (5 + Math.random() * 10) + "s";
+      document.body.appendChild(v);
+    }
+  </script>
 
 </body>
 </html>
+
 
 
 
