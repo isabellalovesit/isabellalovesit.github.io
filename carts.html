@@ -1,1 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Void Karts</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      color: #d6b3ff;
+      font-family: monospace;
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 10px;
+      text-shadow: 0 0 10px purple;
+    }
+
+    #arena {
+      width: 800px;
+      height: 500px;
+      margin: 20px auto;
+      position: relative;
+      background: radial-gradient(circle, #1a0033, #000);
+      border: 3px solid #8f3bff;
+      overflow: hidden;
+    }
+
+    .kart {
+      width: 30px;
+      height: 20px;
+      background: cyan;
+      position: absolute;
+      border-radius: 5px;
+      box-shadow: 0 0 10px cyan;
+    }
+
+    .bullet {
+      width: 6px;
+      height: 6px;
+      background: yellow;
+      position: absolute;
+      border-radius: 50%;
+      box-shadow: 0 0 6px yellow;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🏎️ VOID KARTS 🏎️</h1>
+<p>WASD = Move | SPACE = Shoot</p>
+
+<div id="arena">
+  <div id="kart" class="kart"></div>
+</div>
+
+<script>
+const arena = document.getElementById("arena");
+const kart = document.getElementById("kart");
+
+let x = 380;
+let y = 240;
+let speed = 5;
+let bullets = [];
+
+kart.style.left = x + "px";
+kart.style.top = y + "px";
+
+document.addEventListener("keydown", e => {
+  if (e.key === "w") y -= speed;
+  if (e.key === "s") y += speed;
+  if (e.key === "a") x -= speed;
+  if (e.key === "d") x += speed;
+
+  if (e.code === "Space") shoot();
+
+  // keep inside arena
+  x = Math.max(0, Math.min(770, x));
+  y = Math.max(0, Math.min(480, y));
+
+  kart.style.left = x + "px";
+  kart.style.top = y + "px";
+});
+
+function shoot() {
+  const bullet = document.createElement("div");
+  bullet.className = "bullet";
+  bullet.style.left = x + 15 + "px";
+  bullet.style.top = y + 10 + "px";
+  arena.appendChild(bullet);
+
+  bullets.push({ el: bullet, x: x + 15, y: y + 10 });
+}
+
+function updateBullets() {
+  bullets.forEach((b, i) => {
+    b.x += 8;
+    b.el.style.left = b.x + "px";
+
+    if (b.x > 800) {
+      arena.removeChild(b.el);
+      bullets.splice(i, 1);
+    }
+  });
+
+  requestAnimationFrame(updateBullets);
+}
+
+updateBullets();
+</script>
+<button onclick="location.href='index.html'"
+        style="
+          position: fixed;
+          top: 15px;
+          left: 15px;
+          padding: 12px 22px;
+          font-size: 16px;
+          background: black;
+          color: #d6b3ff;
+          border: 2px solid #8f3bff;
+          border-radius: 12px;
+          cursor: pointer;
+          box-shadow: 0 0 12px #6a00ff;
+        ">
+  ⬅ Home
+</button>
+
+</body>
+</html>
 
