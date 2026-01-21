@@ -1,92 +1,88 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>🌌 isabellas cool games!!! 🌌</title>
-
+  <title>Void Games</title>
   <style>
     body {
       margin: 0;
-      height: 100vh;
-      background: radial-gradient(circle at top, #1a0033, #000);
-      font-family: monospace;
-      color: #d6b3ff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
+      background: #0b0015;
+      font-family: Arial, sans-serif;
+      color: white;
     }
 
-    h1 {
-      font-size: 42px;
-      text-shadow: 0 0 20px #8f3bff;
-      margin-bottom: 40px;
-    }
-
-    .btn {
-      width: 260px;
-      padding: 15px;
-      margin: 10px;
-      font-size: 20px;
+    header {
       background: black;
+      padding: 15px;
+      text-align: center;
+      font-size: 26px;
+      font-weight: bold;
+      border-bottom: 3px solid purple;
       color: #d6b3ff;
-      border: 2px solid #8f3bff;
-      border-radius: 14px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 10px;
+    }
+
+    .game-button {
+      width: 100%;
+      background: black;
+      color: #e6ccff;
+      border: 2px solid purple;
+      padding: 15px;
+      margin: 8px 0;
+      font-size: 18px;
       cursor: pointer;
-      box-shadow: 0 0 12px #6a00ff;
-      transition: 0.2s;
+      text-align: left;
+      border-radius: 6px;
     }
 
-    .btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 25px #b266ff;
-    }
-
-    .void {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: purple;
-      opacity: 0.6;
-      animation: float 10s linear infinite;
-    }
-
-    @keyframes float {
-      from { transform: translateY(100vh); }
-      to { transform: translateY(-10vh); }
+    .game-button:hover {
+      background: #1a0033;
     }
   </style>
 </head>
-
 <body>
 
-  <!-- 🌌 PAGE CONTENT 🌌 -->
+<header>🌌 VOID GAMES 🌌</header>
 
-  <h1>WELCOME TO ISABELLAS COOL GAMES!!!!!!</h1>
+<div class="container">
 
-  <button class="btn" onclick="location.href='blocks.html'">Blocks</button>
-  <button class="btn" onclick="location.href='blastblocks.html'">Blast Blocks</button>
-  <button class="btn" onclick="location.href='boba-game.html'">Boba Eggs</button>
-  <button class="btn" onclick="location.href='blockschat.html'">Blocks Chat</button>
-  <button class="btn" onclick="window.open('https://www.youtube.com/@Isabellamccain-3520','_blank')">My YouTube</button>
-  <button class="btn" onclick="window.open('carts.html','_blank')">carts</button>
+  <button class="game-button" onclick="location.href='blast-blocks.html'">
+    ▶ Blast Blocks
+  </button>
+
+  <button class="game-button" onclick="location.href='void-karts.html'">
+    ▶ Void Karts
+  </button>
+
+  <button class="game-button" onclick="location.href='blocks-chat.html'">
+    ▶ Blocks Chat
+  </button>
+
+  <button class="game-button" onclick="location.href='boba.html'">
+    ▶ Boba Eggs
+  </button>
+
+  <button class="game-button" onclick="window.open('https://www.youtube.com','_blank')">
+    ▶ My YouTube
+  </button>
   
-        
+<button class="game-button" onclick="location.href='moveit.html'">
+    ▶ move it
+  </button>
+<button class="game-button" onclick="location.href='thanks.html'">
+    ▶ thanks!!!
+  </button>
 
-
-  <!-- 🌌 VOID PARTICLES 🌌 -->
-  <script>
-    for (let i = 0; i < 60; i++) {
-      const v = document.createElement("div");
-      v.className = "void";
-      v.style.left = Math.random() * 100 + "vw";
-      v.style.animationDuration = (5 + Math.random() * 10) + "s";
-      document.body.appendChild(v);
-    }
-  </script>
+</div>
 
 </body>
 </html>
+
+
 
 
 
