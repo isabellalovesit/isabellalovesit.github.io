@@ -2,11 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>BLOCKS 10x10 Editor</title>
-  
-  <!-- Favicon (placeholder) -->
+  <title>BLOCKS 10x10 Multiplayer</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon">
-
   <style>
     body {
       background: radial-gradient(circle, #0b0015, #000);
@@ -15,9 +12,7 @@
       text-align: center;
       padding-top: 20px;
     }
-
     h1 { text-shadow: 0 0 15px #8f3bff; }
-
     #grid {
       display: grid;
       grid-template-columns: repeat(10, 40px);
@@ -26,7 +21,6 @@
       justify-content: center;
       margin-top: 20px;
     }
-
     .cell {
       width: 40px;
       height: 40px;
@@ -38,11 +32,9 @@
       transition: all 0.2s;
       background: #1a002a;
     }
-
     #colors {
       margin-top: 20px;
     }
-
     .colorBtn {
       width: 40px;
       height: 40px;
@@ -53,12 +45,10 @@
       cursor: pointer;
       box-shadow: 0 0 8px #4b0082;
     }
-
     .colorBtn.selected {
       border: 3px solid #ffd700;
       box-shadow: 0 0 15px #ffd700;
     }
-
     button {
       padding: 10px 20px;
       margin: 10px;
@@ -70,7 +60,7 @@
 </head>
 <body>
 
-<h1>🌌 BLOCKS 10x10 🌌</h1>
+<h1>🌌 BLOCKS 10x10 Multiplayer 🌌</h1>
 <p>Click a cell to place a block. Pick a color first!</p>
 
 <div id="colors">
@@ -90,7 +80,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
 <script>
-  // Firebase config
+  // ===== Firebase config =====
   const firebaseConfig = {
     apiKey: "AIzaSyAt2MMZ8ks1NQEOYdHvsTD0wjFpXScUsvc",
     authDomain: "blockschat-multiplayer.firebaseapp.com",
@@ -104,27 +94,47 @@
 
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-  // ==== Grid ====
+  // ===== Grid setup =====
   const gridSize = 10;
   let selectedColor = "#4b0082";
   const gridContainer = document.getElementById("grid");
+  const cells = [];
 
   for (let i = 0; i < gridSize * gridSize; i++) {
     const cell = document.createElement("div");
     cell.className = "cell";
     cell.onclick = () => {
+      // Update cell locally
       cell.style.backgroundColor = selectedColor;
+      // Update Firebase
+      db.ref('grid/' + i).set(selectedColor);
     };
     gridContainer.appendChild(cell);
+    cells.push(cell);
   }
 
-  // ==== Color selection ====
+  // ===== Color selection =====
   function selectColor(color, e) {
     selectedColor = color;
     document.querySelectorAll(".colorBtn").forEach(btn => btn.classList.remove("selected"));
     e.target.classList.add("selected");
   }
+
+  // ===== Listen for changes from Firebase =====
+  db.ref('grid').on('value', snapshot => {
+    const data = snapshot.val();
+    if (data) {
+      for (let i = 0; i < gridSize * gridSize; i++) {
+        if (data[i]) {
+          cells[i].style.backgroundColor = data[i];
+        } else {
+          cells[i].style.backgroundColor = '#1a002a'; // default
+        }
+      }
+    }
+  });
 </script>
 
 </body>
