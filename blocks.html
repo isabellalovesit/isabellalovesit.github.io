@@ -56,68 +56,50 @@
   </style>
 </head>
 <body>
-<script src=...>
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyAt2MMZ8ks1NQEOYdHvsTD0wjFpXScUsvc",
-  authDomain: "blockschat-multiplayer.firebaseapp.com",
-  databaseURL: "https://blockschat-multiplayer-default-rtdb.firebaseio.com",
-  projectId: "blockschat-multiplayer",
-  storageBucket: "blockschat-multiplayer.firebasestorage.app",
-  messagingSenderId: "394182284058",
-  appId: "1:394182284058:web:2c6b716fa76a4471c212a3",
-  measurementId: "G-4QES37MZH0"
-};
-<script src=...>
-  <script>
-  
-  };
-
-  firebase.initializeApp(firebaseConfig);
-</script>
 
 <h1>🌌 BLOCKS 10x10 🌌</h1>
 <p>Click a cell to place a block. Pick a color first!</p>
 
 <div id="colors">
-  <div class="colorBtn" style="background:#4b0082;" onclick="selectColor('#4b0082')"></div>
-  <div class="colorBtn" style="background:#0055ff;" onclick="selectColor('#0055ff')"></div>
-  <div class="colorBtn" style="background:#ff33aa;" onclick="selectColor('#ff33aa')"></div>
-  <div class="colorBtn" style="background:#ffd700;" onclick="selectColor('#ffd700')"></div>
-  <div class="colorBtn" style="background:#00ffff;" onclick="selectColor('#00ffff')"></div>
+  <div class="colorBtn" style="background:#4b0082;" onclick="selectColor('#4b0082', event)"></div>
+  <div class="colorBtn" style="background:#0055ff;" onclick="selectColor('#0055ff', event)"></div>
+  <div class="colorBtn" style="background:#ff33aa;" onclick="selectColor('#ff33aa', event)"></div>
+  <div class="colorBtn" style="background:#ffd700;" onclick="selectColor('#ffd700', event)"></div>
+  <div class="colorBtn" style="background:#00ffff;" onclick="selectColor('#00ffff', event)"></div>
 </div>
 
 <div id="grid"></div>
 
-<script>
-const gridSize = 10;
-let selectedColor = "#4b0082";
-
-// ==== Create Grid ====
-const gridContainer = document.getElementById("grid");
-for (let i=0;i<gridSize*gridSize;i++){
-  const cell = document.createElement("div");
-  cell.className = "cell";
-  cell.onclick = () => {
-    cell.style.backgroundColor = selectedColor;
-  };
-  gridContainer.appendChild(cell);
-}
-
-// ==== Color selection ====
-function selectColor(color){
-  selectedColor = color;
-  document.querySelectorAll(".colorBtn").forEach(btn => btn.classList.remove("selected"));
-  event.target.classList.add("selected");
-}
-</script>
 <button onclick="location.href='index.html'" 
         style="padding:10px 20px; margin:10px; font-size:18px; border-radius:10px;">
   ⬅ Back to Home
 </button>
 
-</body>
-</html>
+<!-- Firebase JS SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+<script>
+  // Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyAt2MMZ8ks1NQEOYdHvsTD0wjFpXScUsvc",
+    authDomain: "blockschat-multiplayer.firebaseapp.com",
+    databaseURL: "https://blockschat-multiplayer-default-rtdb.firebaseio.com",
+    projectId: "blockschat-multiplayer",
+    storageBucket: "blockschat-multiplayer.firebasestorage.app",
+    messagingSenderId: "394182284058",
+    appId: "1:394182284058:web:2c6b716fa76a4471c212a3",
+    measurementId: "G-4QES37MZH0"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  // ==== Grid ====
+  const gridSize = 10;
+  let selectedColor = "#4b0082";
+... (22 lines left)
+
 
 
 
