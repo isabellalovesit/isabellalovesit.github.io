@@ -34,10 +34,16 @@ Color<br>
 
 <script>
 firebase.initializeApp({
-  apiKey:"AIzaSyBI7jbEgrN-z7SUx7moImNTDA10B-q8fuw",
-  authDomain:"blockworld-e9b9d.firebaseapp.com",
-  databaseURL:"https://blockworld-e9b9d-default-rtdb.firebaseio.com",
-  projectId:"blockschat-multiplayer"
+const firebaseConfig = {
+  apiKey: "AIzaSyAt2MMZ8ks1NQEOYdHvsTD0wjFpXScUsvc",
+  authDomain: "blockschat-multiplayer.firebaseapp.com",
+  databaseURL: "https://blockschat-multiplayer-default-rtdb.firebaseio.com",
+  projectId: "blockschat-multiplayer",
+  storageBucket: "blockschat-multiplayer.firebasestorage.app",
+  messagingSenderId: "394182284058",
+  appId: "1:394182284058:web:0753a7eeaf078735c212a3",
+  measurementId: "G-T1KG35KTPC"
+};
 });
 
 const db=firebase.database();
@@ -158,5 +164,6 @@ canvas.oncontextmenu=e=>{
 </script>
 </body>
 </html>
+
 
 
