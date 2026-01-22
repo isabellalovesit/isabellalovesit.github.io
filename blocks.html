@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>BLOCKS 10x10 Multiplayer</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon">
+
   <style>
     body {
       background: radial-gradient(circle, #0b0015, #000);
@@ -11,8 +12,13 @@
       font-family: monospace;
       text-align: center;
       padding-top: 20px;
+      margin: 0;
     }
-    h1 { text-shadow: 0 0 15px #8f3bff; }
+
+    h1 {
+      text-shadow: 0 0 15px #8f3bff;
+    }
+
     #grid {
       display: grid;
       grid-template-columns: repeat(10, 40px);
@@ -21,40 +27,37 @@
       justify-content: center;
       margin-top: 20px;
     }
+
     .cell {
       width: 40px;
       height: 40px;
       border: 1px solid #4b0082;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: background-color 0.15s;
       background: #1a002a;
     }
+
     #colors {
       margin-top: 20px;
     }
-    .colorBtn {
-      width: 40px;
-      height: 40px;
+
+    #colorPicker {
+      width: 80px;
+      height: 45px;
       border: 2px solid #8f3bff;
-      border-radius: 6px;
-      display: inline-block;
-      margin: 5px;
+      border-radius: 8px;
       cursor: pointer;
-      box-shadow: 0 0 8px #4b0082;
+      box-shadow: 0 0 12px #4b0082;
+      background: none;
     }
-    .colorBtn.selected {
-      border: 3px solid #ffd700;
-      box-shadow: 0 0 15px #ffd700;
-    }
+
     button {
       padding: 10px 20px;
-      margin: 10px;
+      margin: 15px;
       font-size: 18px;
       border-radius: 10px;
       cursor: pointer;
+      border: none;
     }
   </style>
 </head>
@@ -64,18 +67,14 @@
 <p>Click a cell to place a block. Pick a color first!</p>
 
 <div id="colors">
-  <div class="colorBtn selected" style="background:#4b0082;" onclick="selectColor('#4b0082', event)"></div>
-  <div class="colorBtn" style="background:#0055ff;" onclick="selectColor('#0055ff', event)"></div>
-  <div class="colorBtn" style="background:#ff33aa;" onclick="selectColor('#ff33aa', event)"></div>
-  <div class="colorBtn" style="background:#ffd700;" onclick="selectColor('#ffd700', event)"></div>
-  <div class="colorBtn" style="background:#00ffff;" onclick="selectColor('#00ffff', event)"></div>
+  <input type="color" id="colorPicker" value="#4b0082">
 </div>
 
 <div id="grid"></div>
 
 <button onclick="location.href='index.html'">⬅ Back to Home</button>
 
-<!-- Firebase JS SDK (compat versions) -->
+<!-- Firebase (compat) -->
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
@@ -92,47 +91,40 @@
     measurementId: "G-4QES37MZH0"
   };
 
-  // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
   // ===== Grid setup =====
-  const gridSize = 15;
-  let selectedColor = "#4b0082";
+  const gridSize = 10;
   const gridContainer = document.getElementById("grid");
   const cells = [];
+
+  let selectedColor = "#4b0082";
 
   for (let i = 0; i < gridSize * gridSize; i++) {
     const cell = document.createElement("div");
     cell.className = "cell";
+
     cell.onclick = () => {
-      // Update cell locally
       cell.style.backgroundColor = selectedColor;
-      // Update Firebase
-      db.ref('grid/' + i).set(selectedColor);
+      db.ref("grid/" + i).set(selectedColor);
     };
+
     gridContainer.appendChild(cell);
     cells.push(cell);
   }
 
-  // ===== Color selection =====
-  function selectColor(color, e) {
-    selectedColor = color;
-    document.querySelectorAll(".colorBtn").forEach(btn => btn.classList.remove("selected"));
-    e.target.classList.add("selected");
-  }
+  // ===== Color picker =====
+  const colorPicker = document.getElementById("colorPicker");
+  colorPicker.addEventListener("input", () => {
+    selectedColor = colorPicker.value;
+  });
 
-  // ===== Listen for changes from Firebase =====
-  db.ref('grid').on('value', snapshot => {
-    const data = snapshot.val();
-    if (data) {
-      for (let i = 0; i < gridSize * gridSize; i++) {
-        if (data[i]) {
-          cells[i].style.backgroundColor = data[i];
-        } else {
-          cells[i].style.backgroundColor = '#1a002a'; // default
-        }
-      }
+  // ===== Firebase listener =====
+  db.ref("grid").on("value", snapshot => {
+    const data = snapshot.val() || {};
+    for (let i = 0; i < gridSize * gridSize; i++) {
+      cells[i].style.backgroundColor = data[i] || "#1a002a";
     }
   });
 </script>
