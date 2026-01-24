@@ -22,7 +22,7 @@ button {
   border: 2px solid #7b2cff;
   padding: 15px;
   margin: 10px auto;
-  width: 300px;
+  width: 340px;
   background: #12001f;
 }
 </style>
@@ -33,7 +33,9 @@ button {
 <h1>🧋 Boba Eggs</h1>
 
 <div class="box">
-  💰 Money: $<span id="money">30</span>
+  💰 Money: $<span id="money">30</span><br>
+  🧋 Boba: <span id="boba">0</span><br>
+  ⬆️ Egg Multiplier: x<span id="multi">1</span>
 </div>
 
 <div class="box">
@@ -43,7 +45,21 @@ button {
   <button onclick="buyEgg('Rare')">Rare Egg ($1,000)</button>
   <button onclick="buyEgg('Epic')">Epic Egg ($10,000)</button>
   <button onclick="buyEgg('Legendary')">Legendary Egg ($100,000)</button>
-  <button onclick="buyEgg('Secret')">Secret Egg ($1,000,000)</button>
+</div>
+
+<div class="box">
+  <h3>🍳 Make Boba</h3>
+  <button onclick="makeBoba()">Make Boba</button>
+</div>
+
+<div class="box">
+  <h3>🛒 Sell Boba</h3>
+  <button onclick="sellBoba()">Sell 1 Boba</button>
+</div>
+
+<div class="box">
+  <h3>⬆️ Upgrade Eggs</h3>
+  <button onclick="upgradeEggs()">Upgrade ($<span id="upCost">500</span>)</button>
 </div>
 
 <div class="box">
@@ -52,60 +68,105 @@ button {
 </div>
 
 <div class="box">
-  <h3>🔓 Secret Codes</h3>
+  <h3>🔐 Secret Codes</h3>
   <input id="code" placeholder="enter code">
   <button onclick="useCode()">Redeem</button>
 </div>
 
 <script>
 let money = 30;
+let boba = 0;
 let inventory = [];
+let eggMultiplier = 1;
+let upgradeCost = 500;
 
 const eggData = {
-  Common: { cost: 10, min: 10, max: 20, name: "Milk Tea Egg" },
-  Uncommon: { cost: 100, min: 20, max: 35, name: "Mint Pearl Egg" },
-  Rare: { cost: 1000, min: 35, max: 55, name: "Galaxy Boba Egg" },
-  Epic: { cost: 10000, min: 55, max: 75, name: "Void Brew Egg" },
-  Legendary: { cost: 100000, min: 75, max: 90, name: "Dragon Pearl Egg" },
-  Secret: { cost: 1000000, min: 90, max: 100, name: "💖 Love Egg" }
+  Common: { cost: 10, min: 1, max: 50, name: "Milk Tea Egg" },
+  Uncommon: { cost: 100, min: 50, max: 250, name: "Mint Pearl Egg" },
+  Rare: { cost: 1000, min: 250, max: 1000, name: "Galaxy Boba Egg" },
+  Epic: { cost: 10000, min: 1000, max: 3000, name: "Void Brew Egg" },
+  Legendary: { cost: 100000, min: 3000, max: 5000, name: "Dragon Pearl Egg" }
 };
-
-function updateUI() {
-  document.getElementById("money").textContent = money;
-  document.getElementById("inventory").innerHTML =
-    inventory.length ? inventory.join("<br>") : "Empty";
-}
 
 function random(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function updateUI() {
+  document.getElementById("money").textContent = money;
+  document.getElementById("boba").textContent = boba;
+  document.getElementById("multi").textContent = eggMultiplier.toFixed(1);
+  document.getElementById("upCost").textContent = upgradeCost;
+  document.getElementById("inventory").innerHTML =
+    inventory.length ? inventory.join("<br>") : "Empty";
+}
+
+function saveGame() {
+  localStorage.setItem("bobaSave", JSON.stringify({
+    money, boba, inventory, eggMultiplier, upgradeCost
+  }));
+}
+
+function loadGame() {
+  const save = JSON.parse(localStorage.getItem("bobaSave"));
+  if (!save) return;
+  money = save.money;
+  boba = save.boba;
+  inventory = save.inventory;
+  eggMultiplier = save.eggMultiplier;
+  upgradeCost = save.upgradeCost;
+}
+
 function buyEgg(type) {
   const egg = eggData[type];
-  if (money < egg.cost) {
-    alert("Not enough money!");
-    return;
-  }
+  if (money < egg.cost) return alert("Not enough money!");
   money -= egg.cost;
-  const value = random(egg.min, egg.max);
-  inventory.push(`${egg.name} → Worth $${value}`);
-  updateUI();
+  inventory.push(egg.name);
+  updateUI(); saveGame();
+}
+
+function makeBoba() {
+  if (!inventory.length) return alert("You need an egg!");
+  const eggName = inventory.shift();
+  const base = random(1, 5000);
+  const value = Math.floor(base * eggMultiplier);
+  inventory.push(`🧋 Boba from ${eggName} ($${value})`);
+  boba++;
+  updateUI(); saveGame();
+}
+
+function sellBoba() {
+  const i = inventory.findIndex(x => x.includes("Boba"));
+  if (i === -1) return alert("No boba to sell!");
+  const item = inventory.splice(i, 1)[0];
+  const value = Number(item.match(/\$(\d+)/)[1]);
+  money += value;
+  boba--;
+  updateUI(); saveGame();
+}
+
+function upgradeEggs() {
+  if (money < upgradeCost) return alert("Not enough money!");
+  money -= upgradeCost;
+  eggMultiplier += 0.5;
+  upgradeCost *= 2;
+  updateUI(); saveGame();
 }
 
 function useCode() {
   const code = document.getElementById("code").value.toLowerCase();
   if (code === "blahblahblah") {
-    inventory.push("💖 Love Egg → Worth $100");
-    alert("Secret Love Egg unlocked!");
+    inventory.push("💖 Love Egg ($1000)");
   } else if (code === "stardust") {
-    inventory.push("✨ Stardust Egg → Worth $100");
-    alert("Secret Stardust Egg unlocked!");
+    inventory.push("✨ Stardust Egg ($1000)");
   } else {
     alert("Invalid code");
+    return;
   }
-  updateUI();
+  updateUI(); saveGame();
 }
 
+loadGame();
 updateUI();
 </script>
 
