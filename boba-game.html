@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Boba Eggs</title>
+<title>Boba Egg Tycoon</title>
 <style>
-body {
-  background:#0b0014;
-  color:#e6ccff;
+body{
+  background:#0a0014;
+  color:#e0c3ff;
   font-family:monospace;
   text-align:center;
 }
-button {
+.panel{
+  border:2px solid #7b2cbf;
+  margin:10px auto;
+  padding:10px;
+  width:340px;
+}
+button,input{
   background:black;
   color:#c77dff;
   border:2px solid #9d4edd;
@@ -17,115 +23,158 @@ button {
   margin:5px;
   cursor:pointer;
 }
-.panel {
-  border:2px solid #5a189a;
-  margin:10px auto;
-  padding:10px;
-  width:300px;
-}
 </style>
 </head>
 <body>
 
-<h1>🧋 BOBA EGGS</h1>
+<h1>🧋 BOBA EGG TYCOON</h1>
 
 <div class="panel">
-Coins: <span id="coins">0</span><br>
-Boba: <span id="boba">0</span>
+💰 Money: <span id="money">0</span><br>
+🧋 Boba: <span id="boba">0</span><br>
+⬆️ Upgrade Level: <span id="upgrade">1</span>
 </div>
 
 <div class="panel">
-<h3>Eggs</h3>
+<h3>🥚 Eggs</h3>
 <button onclick="buyEgg()">Buy Egg</button><br>
-Egg Cost: <span id="eggCost">10</span>
+Egg Cost: <span id="eggCost">30</span>
+<p id="lastEgg">No eggs yet</p>
 </div>
 
 <div class="panel">
-<h3>Make Boba</h3>
+<h3>🧋 Boba</h3>
 <button onclick="makeBoba()">Make Boba</button>
-<button onclick="sellBoba()">Sell Boba</button>
+<button onclick="sellBoba()">Sell All Boba</button>
 </div>
 
 <div class="panel">
-<h3>Upgrades</h3>
-<button onclick="buyUpgrade()">Egg Power Upgrade</button><br>
-Level: <span id="upgrade">1</span>
+<h3>⬆️ Upgrades</h3>
+<button onclick="upgradeEggs()">Egg Upgrade</button><br>
+Upgrade Cost: <span id="upCost">200</span>
 </div>
 
 <div class="panel">
-<h3>Secret Codes</h3>
-<input id="codeBox" placeholder="type code">
-<button onclick="useCode()">Use</button>
+<h3>🔐 Secret Codes</h3>
+<input id="codeInput" placeholder="enter code">
+<button onclick="useCode()">Redeem</button>
 <p id="codeMsg"></p>
 </div>
 
 <script>
-let data = JSON.parse(localStorage.getItem("bobaSave")) || {
- coins: 50,
+// SAVE DATA
+let save = JSON.parse(localStorage.getItem("bobaSave")) || {
+ money: 100,
  boba: 0,
- eggCost: 10,
+ eggCost: 30,
  upgrade: 1,
+	codesUsed: {}
 };
 
-function save(){
- localStorage.setItem("bobaSave", JSON.stringify(data));
+// EGG LIST WITH NAMES & RARITIES
+const eggs = [
+  {name:"Milk Tea Egg", rarity:"Common"},
+  {name:"Mint Pearl Egg", rarity:"Uncommon"},
+  {name:"Galaxy Boba Egg", rarity:"Rare"},
+  {name:"Void Brew Egg", rarity:"Epic"},
+  {name:"Dragon Pearl Egg", rarity:"Legendary"}
+];
+
+function saveGame(){
+ localStorage.setItem("bobaSave", JSON.stringify(save));
  update();
 }
 
 function update(){
- coins.textContent = data.coins;
- boba.textContent = data.boba;
- eggCost.textContent = data.eggCost;
- upgrade.textContent = data.upgrade;
+ money.textContent = save.money;
+ boba.textContent = save.boba;
+ eggCost.textContent = save.eggCost;
+ upgrade.textContent = save.upgrade;
+ upCost.textContent = save.upgrade * 200;
 }
-update();
 
-function randEgg(){
- let max = Math.min(5000, data.upgrade * 500);
+// RANDOM EGG VALUE
+function eggValue(){
+ let max = Math.min(5000, save.upgrade * 500);
  return Math.floor(Math.random() * max) + 1;
 }
 
+// RANDOM EGG SELECTION
+function randomEgg(){
+ let index = Math.floor(Math.random()*eggs.length);
+ return eggs[index];
+}
+
+// BUY EGG
 function buyEgg(){
- if(data.coins < data.eggCost) return;
- data.coins -= data.eggCost;
- let value = randEgg();
- data.boba += value;
- data.eggCost = Math.min(1000000, Math.floor(data.eggCost * 1.3));
- save();
+ if(save.money < save.eggCost) return alert("Not enough money!");
+ save.money -= save.eggCost;
+
+ let egg = randomEgg();
+ let value = eggValue();
+ save.boba += value;
+
+ save.eggCost = Math.min(100000, Math.floor(save.eggCost * 1.25));
+ document.getElementById("lastEgg").textContent = 
+   `You got a ${egg.rarity} egg: ${egg.name} (+${value} Boba)`;
+ saveGame();
 }
 
+// MAKE BOBA
 function makeBoba(){
- if(data.boba < 10) return;
- data.boba -= 10;
- data.coins += 20;
- save();
+ if(save.boba < 5) return alert("Not enough boba to make!");
+ save.boba -= 5;
+ save.money += 15;
+ saveGame();
 }
 
+// SELL BOBA
 function sellBoba(){
- if(data.boba < 1) return;
- data.coins += data.boba;
- data.boba = 0;
- save();
+ if(save.boba < 1) return alert("No boba to sell!");
+ save.money += save.boba;
+ save.boba = 0;
+ saveGame();
 }
 
-function buyUpgrade(){
- let cost = data.upgrade * 200;
- if(data.coins < cost) return;
- data.coins -= cost;
- data.upgrade++;
- save();
+// UPGRADE EGGS
+function upgradeEggs(){
+ let cost = save.upgrade * 200;
+ if(save.money < cost) return alert("Not enough money!");
+ save.money -= cost;
+ save.upgrade++;
+ saveGame();
 }
 
+// SECRET CODES
 function useCode(){
- let c = codeBox.value.toLowerCase();
- if(c === "blahblahblah" || c === "stardust"){
-  data.boba += 1000;
-  codeMsg.textContent = "✨ SECRET EGG UNLOCKED!";
- } else {
-  codeMsg.textContent = "❌ Wrong code";
+ let code = codeInput.value.toLowerCase();
+ if(save.codesUsed[code]){
+   codeMsg.textContent="Code already used!";
+   return;
  }
- save();
+
+ if(code === "stardust"){
+   save.boba += 2000;
+   save.money += 500;
+   save.upgrade += 1;
+   codeMsg.textContent="⭐ Stardust activated!";
+ }
+ else if(code === "blahblahblah"){
+   save.boba += 4000;
+   save.money += 1500;
+   save.upgrade += 2;
+   codeMsg.textContent="💜 Blahblahblah unlocked!";
+ }
+ else{
+   codeMsg.textContent="Invalid code.";
+   return;
+ }
+
+ save.codesUsed[code]=true;
+ saveGame();
 }
+
+update();
 </script>
 
 </body>
