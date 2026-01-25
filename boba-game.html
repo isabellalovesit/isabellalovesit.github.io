@@ -11,14 +11,15 @@ body{
 }
 .panel{
   border:2px solid #7b2cbf;
+  background:#12001f;
   margin:10px auto;
-  padding:10px;
+  padding:15px;
   width:340px;
 }
 button,input{
   background:black;
   color:#c77dff;
-  border:2px solid #9d4edd;
+  border:2px solid #7b2cff;
   padding:10px;
   margin:5px;
   cursor:pointer;
@@ -64,117 +65,100 @@ Upgrade Cost: <span id="upCost">200</span>
 <script>
 // SAVE DATA
 let save = JSON.parse(localStorage.getItem("bobaSave")) || {
- money: 100,
- boba: 0,
- eggCost: 30,
- upgrade: 1,
-	codesUsed: {}
+  money: 100,
+  boba: 0,
+  eggCost: 30,
+  upgrade: 1,
+  codesUsed: {}
 };
 
-// EGG LIST WITH NAMES & RARITIES
-const eggs = [
-  {name:"Milk Tea Egg", rarity:"Common"},
-  {name:"Mint Pearl Egg", rarity:"Uncommon"},
-  {name:"Galaxy Boba Egg", rarity:"Rare"},
-  {name:"Void Brew Egg", rarity:"Epic"},
-  {name:"Dragon Pearl Egg", rarity:"Legendary"}
-];
-
 function saveGame(){
- localStorage.setItem("bobaSave", JSON.stringify(save));
- update();
+  localStorage.setItem("bobaSave", JSON.stringify(save));
+  update();
 }
 
 function update(){
- money.textContent = save.money;
- boba.textContent = save.boba;
- eggCost.textContent = save.eggCost;
- upgrade.textContent = save.upgrade;
- upCost.textContent = save.upgrade * 200;
+  document.getElementById("money").textContent = save.money;
+  document.getElementById("boba").textContent = save.boba;
+  document.getElementById("eggCost").textContent = save.eggCost;
+  document.getElementById("upgrade").textContent = save.upgrade;
+  document.getElementById("upCost").textContent = save.upgrade * 200;
 }
+update();
 
 // RANDOM EGG VALUE
 function eggValue(){
- let max = Math.min(5000, save.upgrade * 500);
- return Math.floor(Math.random() * max) + 1;
-}
-
-// RANDOM EGG SELECTION
-function randomEgg(){
- let index = Math.floor(Math.random()*eggs.length);
- return eggs[index];
+  let max = Math.min(5000, save.upgrade * 500);
+  return Math.floor(Math.random() * max) + 1;
 }
 
 // BUY EGG
 function buyEgg(){
- if(save.money < save.eggCost) return alert("Not enough money!");
- save.money -= save.eggCost;
+  if(save.money < save.eggCost) return alert("Not enough money!");
+  save.money -= save.eggCost;
 
- let egg = randomEgg();
- let value = eggValue();
- save.boba += value;
+  let value = eggValue();
+  save.boba += value;
 
- save.eggCost = Math.min(100000, Math.floor(save.eggCost * 1.25));
- document.getElementById("lastEgg").textContent = 
-   `You got a ${egg.rarity} egg: ${egg.name} (+${value} Boba)`;
- saveGame();
+  save.eggCost = Math.min(100000, Math.floor(save.eggCost * 1.25));
+  document.getElementById("lastEgg").textContent = 
+    `You got an egg (+${value} Boba)`;
+  saveGame();
 }
 
 // MAKE BOBA
 function makeBoba(){
- if(save.boba < 5) return alert("Not enough boba to make!");
- save.boba -= 5;
- save.money += 15;
- saveGame();
+  if(save.boba < 5) return alert("Not enough boba to make!");
+  save.boba -= 5;
+  save.money += 15;
+  saveGame();
 }
 
 // SELL BOBA
 function sellBoba(){
- if(save.boba < 1) return alert("No boba to sell!");
- save.money += save.boba;
- save.boba = 0;
- saveGame();
+  if(save.boba < 1) return alert("No boba to sell!");
+  save.money += save.boba;
+  save.boba = 0;
+  saveGame();
 }
 
 // UPGRADE EGGS
 function upgradeEggs(){
- let cost = save.upgrade * 200;
- if(save.money < cost) return alert("Not enough money!");
- save.money -= cost;
- save.upgrade++;
- saveGame();
+  let cost = save.upgrade * 200;
+  if(save.money < cost) return alert("Not enough money!");
+  save.money -= cost;
+  save.upgrade++;
+  saveGame();
 }
 
 // SECRET CODES
 function useCode(){
- let code = codeInput.value.toLowerCase();
- if(save.codesUsed[code]){
-   codeMsg.textContent="Code already used!";
-   return;
- }
+  let code = codeInput.value.toLowerCase();
+  if(save.codesUsed[code]){
+    codeMsg.textContent="Code already used!";
+    return;
+  }
 
- if(code === "stardust"){
-   save.boba += 2000;
-   save.money += 500;
-   save.upgrade += 1;
-   codeMsg.textContent="⭐ Stardust activated!";
- }
- else if(code === "blahblahblah"){
-   save.boba += 4000;
-   save.money += 1500;
-   save.upgrade += 2;
-   codeMsg.textContent="💜 Blahblahblah unlocked!";
- }
- else{
-   codeMsg.textContent="Invalid code.";
-   return;
- }
+  if(code === "stardust"){
+    save.boba += 2000;
+    save.money += 500;
+    save.upgrade += 1;
+    codeMsg.textContent="⭐ Stardust activated!";
+  }
+  else if(code === "blahblahblah"){
+    save.boba += 4000;
+    save.money += 1500;
+    save.upgrade += 2;
+    codeMsg.textContent="💜 Blahblahblah unlocked!";
+  }
+  else{
+    codeMsg.textContent="Invalid code.";
+    return;
+  }
 
- save.codesUsed[code]=true;
- saveGame();
+  save.codesUsed[code]=true;
+  saveGame();
 }
-
-update();
 </script>
 
 </body>
