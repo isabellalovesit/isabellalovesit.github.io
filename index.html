@@ -1,108 +1,158 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>isabellas games</title>
-  <style>
-    body {
-      margin: 0;
-      background: #0b0015;
-      font-family: Arial, sans-serif;
-      color: white;
-    }
+<title>Void Games</title>
 
-    header {
-      background: black;
-      padding: 15px;
-      text-align: center;
-      font-size: 26px;
-      font-weight: bold;
-      border-bottom: 3px solid purple;
-      color: #d6b3ff;
-    }
+<style>
+body{
+  margin:0;
+  background:#080010;
+  color:#eee;
+  font-family:Arial, sans-serif;
+}
 
-    .container {
-      max-width: 800px;
-      margin: 20px auto;
-      padding: 10px;
-    }
+/* Top bar */
+#topbar{
+  background:#000;
+  padding:15px;
+  font-size:28px;
+  font-weight:bold;
+  color:#c77dff;
+  border-bottom:3px solid #7b2cff;
+}
 
-    .game-button {
-      width: 100%;
-      background: black;
-      color: #e6ccff;
-      border: 2px solid purple;
-      padding: 15px;
-      margin: 8px 0;
-      font-size: 18px;
-      cursor: pointer;
-      text-align: left;
-      border-radius: 6px;
-    }
+/* Game grid */
+#games{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
+  gap:15px;
+  padding:20px;
+  max-width:1200px;
+  margin:auto;
+}
 
-    .game-button:hover {
-      background: #1a0033;
-    }
-  </style>
+/* Game buttons (MaxGames style) */
+.game{
+  background:#000;
+  border:2px solid #7b2cff;
+  padding:20px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.game:hover{
+  background:#14001f;
+  transform:translateY(-4px);
+  box-shadow:0 0 20px #9d4edd;
+}
+
+/* Fake thumbnail */
+.thumb{
+  height:120px;
+  background:linear-gradient(135deg,#240046,#10002b);
+  margin-bottom:10px;
+}
+
+/* Title */
+.game h3{
+  margin:5px 0;
+  font-size:18px;
+  color:#e0c3ff;
+}
+
+/* Description */
+.game p{
+  font-size:14px;
+  opacity:0.8;
+}
+
+/* Footer */
+footer{
+  text-align:center;
+  padding:15px;
+  opacity:0.5;
+}
+</style>
 </head>
+
 <body>
 
-<header>🌌 isabella games 🌌</header>
+<div id="topbar">VOID GAMES</div>
 
-<div class="container">
+<div id="games">
 
-  <button class="game-button" onclick="location.href='blastblocks.html'">
-    ▶ Blast Blocks
-  </button>
+  <div class="game" onclick="go('boba.html')">
+    <div class="thumb"></div>
+    <h3>Boba Egg Tycoon</h3>
+    <p>Open eggs. Make boba. Get rich.</p>
+  </div>
 
-  <button class="game-button" onclick="location.href='carts.html'">
-    ▶ Void Karts
-  </button>
+  <div class="game" onclick="go('blocks.html')">
+    <div class="thumb"></div>
+    <h3>Blocks</h3>
+    <p>Place blocks with other players.</p>
+  </div>
 
-  <button class="game-button" onclick="location.href='blockschat.html'">
-    ▶ Blocks Chat
-  </button>
+  <div class="game" onclick="go('blastblockshtml')">
+    <div class="thumb"></div>
+    <h3>Blast Blocks</h3>
+    <p>Block puzzle chaos.</p>
+  </div>
 
-  <button class="game-button" onclick="location.href='boba-game.html'">
-    ▶ Boba Eggs
-  </button>
+  <div class="game" onclick="go('blockschat.html')">
+    <div class="thumb"></div>
+    <h3>Blocks Chat</h3>
+    <p>Chat with players.</p>
+  </div>
 
-  <button class="game-button" onclick="window.open('https://www.youtube.com','_blank')">
-    ▶ My YouTube
-  </button>
+  <div class="game" onclick="go('updatelog.html')">
+    <div class="thumb"></div>
+    <h3>Update Log</h3>
+    <p>See what’s new.</p>
+  </div>
+
+  <div class="game" onclick="go('bugs.html')">
+    <div class="thumb"></div>
+    <h3>Bugs & Fixes</h3>
+    <p>Known issues.</p>
+  </div>
   
-<button class="game-button" onclick="location.href='moveit.html'">
-    ▶ move it
-  </button>
-<button class="game-button" onclick="location.href='thanks.html'">
-    ▶ thanks!!!
-  </button>
-<button class="game-button" onclick="location.href='blocks.html'">
-    ▶ blocks!!!
-  </button>
-  <button class="game-button" onclick="location.href='updatelog.html'">
-    ▶ update log
-  </button>
+  <div class="game" onclick="go('login.html')">
+    <div class="thumb"></div>
+    <h3>login</h3>
+    <p>idk login.</p>
+  </div>
+  
+<div class="game" onclick="go('thanks.html')">
+    <div class="thumb"></div>
+    <h3>thanks</h3>
+    <p>thanks thanks thanks.</p>
+  </div>
+  
+<div class="game" onclick="go('carts.html')">
+    <div class="thumb"></div>
+    <h3>carts</h3>
+    <p>uhhh dont mind me.</p>
+  </div>
+  
+<div class="game" onclick="go('moveit.html')">
+    <div class="thumb"></div>
+    <h3>move it</h3>
+    <p>lets move it.</p>
+  </div>
+
+
 </div>
+
+<footer>
+© Void Games
+</footer>
+
+<script>
+function go(page){
+  window.location.href = page;
+}
+</script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
