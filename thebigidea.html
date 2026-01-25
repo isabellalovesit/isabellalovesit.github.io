@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>The Big Idea</title>
+
+<style>
+body{
+  margin:0;
+  background:#07000f;
+  color:#e6ccff;
+  font-family:Arial, sans-serif;
+}
+
+/* Top title area */
+#header{
+  background:#000;
+  border-bottom:3px solid #7b2cff;
+  padding:30px;
+  text-align:center;
+}
+
+#header h1{
+  margin:0;
+  font-size:36px;
+  color:#c77dff;
+}
+
+#header p{
+  margin-top:10px;
+  font-size:16px;
+  opacity:0.85;
+}
+
+/* Section titles */
+.section-title{
+  margin:30px 20px 10px;
+  font-size:22px;
+  color:#d6b3ff;
+}
+
+/* Game grid */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
+  gap:15px;
+  padding:20px;
+  max-width:1200px;
+  margin:auto;
+}
+
+/* Game card */
+.card{
+  background:#000;
+  border:2px solid #7b2cff;
+  padding:15px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.card:hover{
+  background:#14001f;
+  box-shadow:0 0 20px #9d4edd;
+  transform:translateY(-4px);
+}
+
+/* Fake thumbnail */
+.thumb{
+  height:120px;
+  background:linear-gradient(135deg,#240046,#10002b);
+  margin-bottom:10px;
+}
+
+/* Card text */
+.card h3{
+  margin:5px 0;
+  color:#e0c3ff;
+}
+
+.card p{
+  font-size:14px;
+  opacity:0.8;
+}
+
+/* Footer */
+footer{
+  text-align:center;
+  padding:20px;
+  opacity:0.5;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div id="header">
+  <h1>THE BIG IDEA</h1>
+  <p>Welcome to the Big Idea — choose what YOU want to play</p>
+</div>
+
+<!-- NEW GAMES -->
+<div class="section-title">✨ New Games</div>
+<div class="grid">
+  <div class="card">
+    <div class="thumb"></div>
+    <h3>New Game</h3>
+    <p>Coming soon...</p>
+  </div>
+
+  <div class="card">
+    <div class="thumb"></div>
+    <h3>New Game</h3>
+    <p>Coming soon...</p>
+  </div>
+</div>
+
+<!-- ALL GAMES -->
+<div class="section-title">🎮 Choose a thing</div>
+<div class="grid">
+
+
+</div>
+
+<footer>
+© isabellas cool games — The Big Idea
+</footer>
+
+<script>
+function go(page){
+  window.location.href = page;
+}
+</script>
+
+</body>
+</html>
