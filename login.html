@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login</title>
+<style>
+body {
+  margin:0;
+  font-family: monospace;
+  background:#0a0014;
+  color:#e0c3ff;
+  text-align:center;
+}
+input, button {
+  padding:10px;
+  margin:5px;
+  border:2px solid #7b2cff;
+  background:black;
+  color:#c77dff;
+  cursor:pointer;
+}
+.panel {
+  border:2px solid #7b2cff;
+  background:#12001f;
+  padding:15px;
+  margin:50px auto;
+  width:300px;
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN / SIGN UP SCREEN -->
+<div id="loginScreen">
+  <h1>🔑 Welcome</h1>
+
+  <div class="panel">
+    <h3>Login</h3>
+    <input type="text" id="loginUser" placeholder="Username"><br>
+    <input type="password" id="loginPass" placeholder="Password"><br>
+    <button onclick="login()">Login</button>
+    <p id="loginMsg"></p>
+  </div>
+
+  <div class="panel">
+    <h3>Sign Up</h3>
+    <input type="text" id="signupUser" placeholder="New Username"><br>
+    <input type="password" id="signupPass" placeholder="New Password"><br>
+    <button onclick="signup()">Sign Up</button>
+    <p id="signupMsg"></p>
+  </div>
+</div>
+
+<script>
+// USERS DATABASE (localStorage)
+let users = JSON.parse(localStorage.getItem("users")) || {};
+
+// LOGIN FUNCTION
+function login() {
+  let user = document.getElementById("loginUser").value.trim();
+  let pass = document.getElementById("loginPass").value;
+
+  if(!user || !pass){
+    document.getElementById("loginMsg").textContent = "Enter username and password!";
+    return;
+  }
+
+  if(users[user] && users[user].pass === pass){
+    document.getElementById("loginMsg").textContent = "✅ Login successful! Reload page to continue.";
+    localStorage.setItem("lastUser", user);
+  } else {
+    document.getElementById("loginMsg").textContent = "❌ Invalid username or password!";
+  }
+}
+
+// SIGN UP FUNCTION
+function signup() {
+  let user = document.getElementById("signupUser").value.trim();
+  let pass = document.getElementById("signupPass").value;
+
+  if(!user || !pass){
+    document.getElementById("signupMsg").textContent = "Enter username and password!";
+    return;
+  }
+
+  if(users[user]){
+    document.getElementById("signupMsg").textContent = "❌ Username already exists!";
+    return;
+  }
+
+  // Save new user
+  users[user] = {pass: pass};
+  localStorage.setItem("users", JSON.stringify(users));
+  document.getElementById("signupMsg").textContent = "✅ Account created! You can login now.";
+}
+
+// AUTO LOGIN IF LAST USER EXISTS
+let lastUser = localStorage.getItem("lastUser");
+if(lastUser && users[lastUser]){
+  document.getElementById("loginMsg").textContent = "Welcome back, " + lastUser + "! Reload the page to continue.";
+}
+</script>
+
+</body>
+</html>
