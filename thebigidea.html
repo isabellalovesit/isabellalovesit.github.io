@@ -1,133 +1,135 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>The Big Idea</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Isabella's Games</title>
 
 <style>
-body{
-  margin:0;
-  background:#07000f;
-  color:#e6ccff;
-  font-family:Arial, sans-serif;
+body {
+    margin: 0;
+    font-family: Verdana, sans-serif;
+    background: linear-gradient(135deg, #0b0b15, #151530);
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
 
-/* Top title area */
-#header{
-  background:#000;
-  border-bottom:3px solid #7b2cff;
-  padding:30px;
-  text-align:center;
+h1 {
+    font-size: 2.6em;
+    color: #3399ff;
+    text-shadow: 3px 3px #000;
+    margin-bottom: 30px;
 }
 
-#header h1{
-  margin:0;
-  font-size:36px;
-  color:#c77dff;
+select {
+    padding: 15px;
+    font-size: 1.2em;
+    border-radius: 12px;
+    border: 2px solid #3399ff;
+    background: #1a1a2e;
+    color: white;
+    outline: none;
 }
 
-#header p{
-  margin-top:10px;
-  font-size:16px;
-  opacity:0.85;
+button {
+    padding: 15px 25px;
+    font-size: 1.2em;
+    margin-left: 10px;
+    border-radius: 12px;
+    border: 2px solid #3399ff;
+    background: #1a1a2e;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
-/* Section titles */
-.section-title{
-  margin:30px 20px 10px;
-  font-size:22px;
-  color:#d6b3ff;
+button:hover {
+    background: #3399ff;
+    color: black;
+    transform: scale(1.05);
 }
 
-/* Game grid */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
-  gap:15px;
-  padding:20px;
-  max-width:1200px;
-  margin:auto;
+.note {
+    margin-top: 25px;
+    color: #aaa;
 }
 
-/* Game card */
-.card{
-  background:#000;
-  border:2px solid #7b2cff;
-  padding:15px;
-  cursor:pointer;
-  transition:0.2s;
+.sparkle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #3399ff;
+    border-radius: 50%;
+    animation: sparkle 3s infinite ease-in-out;
 }
 
-.card:hover{
-  background:#14001f;
-  box-shadow:0 0 20px #9d4edd;
-  transform:translateY(-4px);
-}
-
-/* Fake thumbnail */
-.thumb{
-  height:120px;
-  background:linear-gradient(135deg,#240046,#10002b);
-  margin-bottom:10px;
-}
-
-/* Card text */
-.card h3{
-  margin:5px 0;
-  color:#e0c3ff;
-}
-
-.card p{
-  font-size:14px;
-  opacity:0.8;
-}
-
-/* Footer */
-footer{
-  text-align:center;
-  padding:20px;
-  opacity:0.5;
+@keyframes sparkle {
+    0% { opacity: 1; transform: translateY(0); }
+    50% { opacity: 0.4; transform: translateY(-12px); }
+    100% { opacity: 1; transform: translateY(0); }
 }
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-<div id="header">
-  <h1>THE BIG IDEA</h1>
-  <p>Welcome to the Big Idea — choose what YOU want to play</p>
+<h1>Play one of Isabella's games!</h1>
+
+<div>
+    <select id="ver">
+        <option value="">Select a game!</option>
+        <option value="TMS/TMS 0.1.html">0.1</option>
+        <option value="TMS/TMS 0.2.html">0.2</option>
+        <option value="TMS/TMS 0.3.html">0.3</option>
+        <option value="TMS/TMS 0.4.html">0.4</option>
+        <option value="TMS/TMS 0.5.html">0.5</option>
+        <option value="TMS/TMS 0.6.html">0.6</option>
+        <option value="TMS/TMS 0.7.html">0.7</option>
+        <option value="TMS/TMS 0.8.html">0.8</option>
+        <option value="TMS/TMS 0.9.html">0.9</option>
+        <option value="TMS/TMS 1.0.html">1.0</option>
+        <option value="TMS/TMS 1.1.html">1.1</option>
+        <option value="TMS/TMS 1.2.html">1.2</option>
+        <option value="TMS/TMS 1.3.html">1.3</option>
+        <option value="TMS/TMS 1.4.html">1.4</option>
+        <option value="TMS/TMS 1.5.html">1.5</option>
+        <option value="TMS/TMS 1.6.html">1.6</option>
+        <option value="TMS/TMS 1.7.html">1.7</option>
+        <option value="TMS/TMS 1.8.html">1.8</option>
+        <option value="TMS/TMS 1.9.html">1.9</option>
+        <option value="TMS/TMS 2.0.html">2.0</option>
+    </select>
+
+    <button onclick="openTMS()">Open</button>
 </div>
 
-<!-- NEW GAMES -->
-<div class="section-title">✨ New Games</div>
-<div class="grid">
-  <div class="card">
-    <div class="thumb"></div>
-    <h3>New Game</h3>
-    <p>Coming soon...</p>
-  </div>
-
-  <div class="card">
-    <div class="thumb"></div>
-    <h3>New Game</h3>
-    <p>Coming soon...</p>
-  </div>
+<div class="note">
+Opens the selected game in a new tab!
 </div>
-
-<!-- ALL GAMES -->
-<div class="section-title">🎮 Choose a thing</div>
-<div class="grid">
-
-
-</div>
-
-<footer>
-© isabellas cool games — The Big Idea
-</footer>
 
 <script>
-function go(page){
-  window.location.href = page;
+function openTMS() {
+    const v = document.getElementById("ver").value;
+    if (!v) {
+        alert("Select a game first!");
+        return;
+    }
+    window.open(v, "_blank");
+}
+
+// sparkles
+for (let i = 0; i < 30; i++) {
+    const s = document.createElement("div");
+    s.className = "sparkle";
+    s.style.left = Math.random() * innerWidth + "px";
+    s.style.top = Math.random() * innerHeight + "px";
+    s.style.width = s.style.height = (2 + Math.random() * 4) + "px";
+    document.body.appendChild(s);
 }
 </script>
 
