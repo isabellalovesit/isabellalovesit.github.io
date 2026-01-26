@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Random Game</title>
+  <style>
+    body {
+      background: #0a0014;
+      color: #e0c3ff;
+      font-family: monospace;
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 40px;
+    }
+
+    button {
+      margin-top: 60px;
+      font-size: 24px;
+      padding: 20px 40px;
+      background: black;
+      color: #c77dff;
+      border: 3px solid #9d4edd;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #240046;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎲 Random Game Button</h1>
+  <p>Click to be sent to a random game!</p>
+
+  <button onclick="goToRandomGame()">PLAY</button>
+
+  <script>
+    const games = [
+      "https://www.coolmathgames.com/",
+      "https://chromedino.com/",
+      "https://slither.io/",
+      "https://agar.io/",
+      "https://paper-io.com/",
+      "https://www.crazygames.com/"
+    ];
+
+    function goToRandomGame() {
+      const randomIndex = Math.floor(Math.random() * games.length);
+      window.location.href = games[randomIndex];
+    }
+  </script>
+
+</body>
+</html>
