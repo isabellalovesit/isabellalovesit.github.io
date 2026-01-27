@@ -128,14 +128,15 @@
   presenceRef.set({ name: playerName });
   presenceRef.onDisconnect().remove();
 
-  // 🔴 LEAVE MESSAGE
-  presenceRef.onDisconnect().then(() => {
+  // 🔴 LEAVE MESSAGE (works on refresh/close)
+  window.addEventListener("beforeunload", () => {
     chatRef.push({
       system: true,
       text: `🔴 ${playerName} left the chat`
     });
   });
 
+  // Send message
   function sendMessage() {
     const text = chatInput.value.trim();
     if (!text) return;
@@ -149,6 +150,7 @@
     chatInput.value = "";
   }
 
+  // Receive messages
   chatRef.limitToLast(100).on("child_added", snap => {
     const data = snap.val();
     const div = document.createElement("div");
