@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Blocks Chat (Easy)</title>
+  <title>Blocks Chat</title>
   <style>
     body {
       background: radial-gradient(circle, #0b0015, #000);
@@ -32,6 +32,7 @@
       padding: 8px;
       text-align: left;
       margin-bottom: 10px;
+      font-size: 14px;
     }
 
     #inputContainer {
@@ -62,11 +63,16 @@
       box-shadow: 0 0 20px #b266ff;
       transform: scale(1.05);
     }
+
+    .system {
+      color: #aaa;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
 
-<h1>🌌 BLOCKS CHAT EASY 🌌</h1>
+<h1>🌌 BLOCKS CHAT 🌌</h1>
 
 <div id="chatContainer">
   <div id="messages"></div>
@@ -76,67 +82,93 @@
   </div>
 </div>
 
-<script// 
-};>
-// Ask player name once
-const playerName = prompt("Enter your player name:") || "Player";
-
-// Chat elements
-const messages = document.getElementById("messages");
-const chatInput = document.getElementById("chatInput");
-const sendBtn = document.getElementById("sendBtn");
-
-// Load previous messages from localStorage
-let chatLog = JSON.parse(localStorage.getItem("blocksChat")) || [];
-updateChat();
-
-// Send a message
-function sendMessage() {
-  const text = chatInput.value.trim();
-  if(!text) return;
-  const time = new Date().toLocaleTimeString();
-  const msg = `[${time}] ${playerName}: ${text}`;
-  chatLog.push(msg);
-  localStorage.setItem("blocksChat", JSON.stringify(chatLog));
-  chatInput.value = "";
-  updateChat();
-}
-
-// Update chat display
-function updateChat() {
-  messages.innerHTML = chatLog.map(m => `<div>${m}</div>`).join("");
-  messages.scrollTop = messages.scrollHeight;
-}
-
-// Listen for localStorage changes (other tabs)
-window.addEventListener("storage", e => {
-  if(e.key === "blocksChat") {
-    chatLog = JSON.parse(e.newValue);
-    updateChat();
-  }
-});
-
-// Send button and Enter key
-sendBtn.addEventListener("click", sendMessage);
-chatInput.addEventListener("keydown", e => {
-  if(e.key === "Enter") sendMessage();
-});
-</script>
-<button onclick="location.href='index.html'" 
-        style="position:fixed; top:10px; left:10px; 
-               padding:10px 20px; font-size:18px; 
-               border-radius:10px; border:2px solid #8f3bff; 
-               background:black; color:#d6b3ff; 
-               box-shadow:0 0 12px #6a00ff; cursor:pointer;">
-  ⬅ Home
+<button onclick="location.href='index.html'"
+  style="position:fixed; top:10px; left:10px;
+  padding:10px 20px; font-size:18px;
+  border-radius:10px; border:2px solid #8f3bff;
+  background:black; color:#d6b3ff;
+  box-shadow:0 0 12px #6a00ff; cursor:pointer;">
+⬅ Home
 </button>
+
+<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAt2MMZ8ks1NQEOYdHvsTD0wjFpXScUsvc",
+    authDomain: "blockschat-multiplayer.firebaseapp.com",
+    databaseURL: "https://blockschat-multiplayer-default-rtdb.firebaseio.com",
+    projectId: "blockschat-multiplayer",
+    storageBucket: "blockschat-multiplayer.firebasestorage.app",
+    messagingSenderId: "394182284058",
+    appId: "1:394182284058:web:0753a7eeaf078735c212a3",
+    measurementId: "G-T1KG35KTPC"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+
+  const playerName = prompt("Enter your name:") || "Player";
+
+  const messagesDiv = document.getElementById("messages");
+  const chatInput = document.getElementById("chatInput");
+  const sendBtn = document.getElementById("sendBtn");
+
+  const chatRef = database.ref("blocksChat");
+  const presenceRef = database.ref("presence").push();
+
+  // 🟢 JOIN MESSAGE
+  chatRef.push({
+    system: true,
+    text: `🟢 ${playerName} joined the chat`
+  });
+
+  presenceRef.set({ name: playerName });
+  presenceRef.onDisconnect().remove();
+
+  // 🔴 LEAVE MESSAGE
+  presenceRef.onDisconnect().then(() => {
+    chatRef.push({
+      system: true,
+      text: `🔴 ${playerName} left the chat`
+    });
+  });
+
+  function sendMessage() {
+    const text = chatInput.value.trim();
+    if (!text) return;
+
+    chatRef.push({
+      name: playerName,
+      message: text,
+      time: new Date().toLocaleTimeString()
+    });
+
+    chatInput.value = "";
+  }
+
+  chatRef.limitToLast(100).on("child_added", snap => {
+    const data = snap.val();
+    const div = document.createElement("div");
+
+    if (data.system) {
+      div.className = "system";
+      div.textContent = data.text;
+    } else {
+      div.textContent = `[${data.time}] ${data.name}: ${data.message}`;
+    }
+
+    messagesDiv.appendChild(div);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  });
+
+  sendBtn.addEventListener("click", sendMessage);
+  chatInput.addEventListener("keydown", e => {
+    if (e.key === "Enter") sendMessage();
+  });
+</script>
+
 </body>
 </html>
-
-
-
-
-
-
