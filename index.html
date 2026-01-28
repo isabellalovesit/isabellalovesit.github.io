@@ -241,9 +241,36 @@ function go(page){
   window.location.href = page;
 }
 </script>
+<button id="secretBtn"></button>
+
+<style>
+#secretBtn {
+  position: fixed;
+  bottom: 6px;
+  right: 6px;
+  width: 16px;
+  height: 16px;
+  background: red;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0.8;
+}
+</style>
+
+<script>
+let clicks = 0;
+document.getElementById("secretBtn").onclick = () => {
+  clicks++;
+  if (clicks === 5) {
+    alert("🤫 Secret unlocked!");
+  }
+};
+</script>
 
 </body>
 </html>
+
 
 
 
