@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>isabellas cool games!!</title>
+  <title>Isabella's Cool Games</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="yourimage.png">
 
@@ -9,50 +9,41 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: black;
+      background: linear-gradient(180deg, #0f172a, #1e293b);
       color: white;
       text-align: center;
       transition: 0.4s;
     }
 
-    /* 🌌 Galaxy Background */
-    body.galaxy {
-      background:
-        radial-gradient(white 1px, transparent 1px),
-        radial-gradient(circle at 20% 30%, #2a003f, black 60%),
-        radial-gradient(circle at 80% 70%, #001f3f, black 60%);
-      background-size: 3px 3px, cover, cover;
-      background-color: black;
-    }
-
     h1 {
       padding-top: 40px;
       font-size: 40px;
+      color: #38bdf8;
     }
 
-    /* 🔘 GAME BUTTON GRID */
+    /* Game Grid */
     .games-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 15px;
-      max-width: 900px;
+      max-width: 1000px;
       margin: 40px auto;
     }
 
     .game {
-      background: rgba(255,255,255,0.1);
-      padding: 15px;
-      border-radius: 15px;
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 12px;
       width: 180px;
       cursor: pointer;
       transition: 0.3s;
-      backdrop-filter: blur(5px);
+      border: 1px solid #334155;
     }
 
     .game:hover {
-      transform: scale(1.08);
-      background: rgba(255,255,255,0.2);
+      transform: translateY(-5px);
+      background: #334155;
     }
 
     .game h3 {
@@ -65,7 +56,7 @@
       opacity: 0.8;
     }
 
-    /* 🖼 Gallery */
+    /* Gallery */
     .gallery {
       margin-top: 120px;
       padding: 40px;
@@ -74,22 +65,24 @@
     .gallery img {
       width: 250px;
       margin: 15px;
-      border-radius: 15px;
+      border-radius: 12px;
       transition: 0.3s;
+      border: 1px solid #334155;
     }
 
     .gallery img:hover {
       transform: scale(1.05);
     }
 
-    /* 📩 Contact */
+    /* Contact */
     .contact {
       margin-top: 120px;
       padding: 40px;
-      background: rgba(255,255,255,0.1);
+      background: #1e293b;
+      border-top: 1px solid #334155;
     }
 
-    /* 🎨 Theme Switcher */
+    /* Theme Switcher Buttons */
     .theme-switcher {
       position: fixed;
       top: 10px;
@@ -99,79 +92,106 @@
     .theme-switcher button {
       margin: 5px;
       padding: 6px 12px;
-      border-radius: 10px;
+      border-radius: 8px;
       border: none;
       cursor: pointer;
+    }
+
+    /* Neon Theme */
+    body.neon {
+      background: linear-gradient(180deg, #0f0f0f, #1a1a1a);
+      color: #00ffea;
+    }
+    body.neon .game {
+      background: #111;
+      border: 1px solid #00ffea;
+    }
+    body.neon .game:hover {
+      background: #00ffea;
+      color: black;
+    }
+    body.neon h1 {
+      color: #00ffea;
+    }
+
+    /* Dark Theme */
+    body.dark {
+      background: linear-gradient(180deg, #0f172a, #1e293b);
+      color: white;
+    }
+    body.dark .game {
+      background: #1e293b;
+      border: 1px solid #334155;
+    }
+    body.dark .game:hover {
+      background: #334155;
+    }
+    body.dark h1 {
+      color: #38bdf8;
+    }
+
+    /* Normal Theme */
+    body.normal {
+      background: #555;
+      color: white;
+    }
+    body.normal .game {
+      background: #777;
+      border: 1px solid #999;
+    }
+    body.normal .game:hover {
+      background: #999;
+    }
+    body.normal h1 {
+      color: #fff;
+    }
+
+    /* Light Theme */
+    body.light {
+      background: white;
+      color: black;
+    }
+    body.light .game {
+      background: #ddd;
+      border: 1px solid #bbb;
+      color: black;
+    }
+    body.light .game:hover {
+      background: #bbb;
+    }
+    body.light h1 {
+      color: #000;
     }
 
   </style>
 </head>
 
-<body class="galaxy">
+<body class="dark">
 
   <div class="theme-switcher">
-    <button onclick="setGalaxy()">Galaxy</button>
-    <button onclick="setLight()">Light</button>
+    <button onclick="setTheme('neon')">Neon</button>
+    <button onclick="setTheme('dark')">Dark</button>
+    <button onclick="setTheme('normal')">Normal</button>
+    <button onclick="setTheme('light')">Light</button>
   </div>
 
-  <h1>⭐ Isabella Loves It ⭐</h1>
+  <h1>Isabella's Cool Games</h1>
 
   <div class="games-container">
-
-    <div class="game" onclick="go('boba-game.html')">
-      <h3>Boba Egg Tycoon</h3>
-      <p>Open eggs. Make boba.</p>
-    </div>
-
-    <div class="game" onclick="go('blocks.html')">
-      <h3>Blocks</h3>
-      <p>Place blocks.</p>
-    </div>
-
-    <div class="game" onclick="go('blastblocks.html')">
-      <h3>Blast Blocks</h3>
-      <p>Puzzle chaos.</p>
-    </div>
-
-    <div class="game" onclick="go('blockschat.html')">
-      <h3>Blocks Chat</h3>
-      <p>Chat with players.</p>
-    </div>
-
-    <div class="game" onclick="go('updatelog.html')">
-      <h3>Update Log</h3>
-      <p>See what’s new.</p>
-    </div>
-
-    <div class="game" onclick="go('bugs.html')">
-      <h3>Bugs & Fixes</h3>
-      <p>Known issues.</p>
-    </div>
-
-    <div class="game" onclick="go('thanks.html')">
-      <h3>Thanks</h3>
-      <p>Support page.</p>
-    </div>
-
-    <div class="game" onclick="go('carts.html')">
-      <h3>Carts</h3>
-      <p>Don’t mind me.</p>
-    </div>
-
-    <div class="game" onclick="go('moveit.html')">
-      <h3>Move It</h3>
-      <p>Let’s move it.</p>
-    </div>
-
-    <div class="game" onclick="go('thebigidea.html')">
-      <h3>The BIG Game</h3>
-      <p>Find your favorite.</p>
-    </div>
-
+    <div class="game" onclick="go('boba-game.html')"><h3>Boba Egg Tycoon</h3><p>Open eggs. Make boba.</p></div>
+    <div class="game" onclick="go('blocks.html')"><h3>Blocks</h3><p>Place blocks.</p></div>
+    <div class="game" onclick="go('blastblocks.html')"><h3>Blast Blocks</h3><p>Puzzle chaos.</p></div>
+    <div class="game" onclick="go('blockschat.html')"><h3>Blocks Chat</h3><p>Chat with players.</p></div>
+    <div class="game" onclick="go('updatelog.html')"><h3>Update Log</h3><p>See what’s new.</p></div>
+    <div class="game" onclick="go('bugs.html')"><h3>Bugs & Fixes</h3><p>Known issues.</p></div>
+    <div class="game" onclick="go('thanks.html')"><h3>Thanks</h3><p>Support page.</p></div>
+    <div class="game" onclick="go('carts.html')"><h3>Carts</h3><p>Extra fun.</p></div>
+    <div class="game" onclick="go('moveit.html')"><h3>Move It</h3><p>Let’s move it.</p></div>
+    <div class="game" onclick="go('thebigidea.html')"><h3>The BIG Game</h3><p>Find your favorite.</p></div>
   </div>
 
   <div class="gallery">
-    <h2>✨ My Games & Website ✨</h2>
+    <h2>My Games & Website</h2>
     <img src="image1.jpg">
     <img src="image2.jpg">
     <img src="image3.jpg">
@@ -183,20 +203,8 @@
   </div>
 
   <script>
-    function go(page) {
-      window.location.href = page;
-    }
-
-    function setGalaxy() {
-      document.body.className = "galaxy";
-      document.body.style.color = "white";
-    }
-
-    function setLight() {
-      document.body.className = "";
-      document.body.style.background = "white";
-      document.body.style.color = "black";
-    }
+    function go(page) { window.location.href = page; }
+    function setTheme(theme) { document.body.className = theme; }
   </script>
 
 </body>
