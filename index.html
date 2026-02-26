@@ -3,7 +3,8 @@
 <head>
   <title>isabellas cool games!!</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="yourimage.png">
+  <link rel="icon" href="yourimage.png">
+
   <style>
     body {
       margin: 0;
@@ -16,8 +17,11 @@
 
     /* 🌌 Galaxy Background */
     body.galaxy {
-      background: radial-gradient(circle at 20% 30%, #2a003f, black 60%),
-                  radial-gradient(circle at 80% 70%, #001f3f, black 60%);
+      background:
+        radial-gradient(white 1px, transparent 1px),
+        radial-gradient(circle at 20% 30%, #2a003f, black 60%),
+        radial-gradient(circle at 80% 70%, #001f3f, black 60%);
+      background-size: 3px 3px, cover, cover;
       background-color: black;
     }
 
@@ -26,36 +30,44 @@
       font-size: 40px;
     }
 
-    /* 🔘 Small Buttons */
-    .button-container {
-      margin: 40px auto;
-      max-width: 700px;
+    /* 🔘 GAME BUTTON GRID */
+    .games-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
+      gap: 15px;
+      max-width: 900px;
+      margin: 40px auto;
     }
 
-    .small-btn {
-      padding: 8px 15px;
-      font-size: 14px;
-      border: none;
-      border-radius: 20px;
+    .game {
+      background: rgba(255,255,255,0.1);
+      padding: 15px;
+      border-radius: 15px;
+      width: 180px;
       cursor: pointer;
-      background: white;
-      color: black;
       transition: 0.3s;
+      backdrop-filter: blur(5px);
     }
 
-    .small-btn:hover {
-      transform: scale(1.1);
-      background: #ff66cc;
-      color: white;
+    .game:hover {
+      transform: scale(1.08);
+      background: rgba(255,255,255,0.2);
     }
 
-    /* 🖼 Image Section */
+    .game h3 {
+      margin: 5px 0;
+      font-size: 16px;
+    }
+
+    .game p {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    /* 🖼 Gallery */
     .gallery {
-      margin-top: 100px;
+      margin-top: 120px;
       padding: 40px;
     }
 
@@ -63,16 +75,21 @@
       width: 250px;
       margin: 15px;
       border-radius: 15px;
+      transition: 0.3s;
     }
 
-    /* 📩 Contact Section */
+    .gallery img:hover {
+      transform: scale(1.05);
+    }
+
+    /* 📩 Contact */
     .contact {
-      margin-top: 100px;
+      margin-top: 120px;
       padding: 40px;
       background: rgba(255,255,255,0.1);
     }
 
-    /* 🎨 Theme Buttons */
+    /* 🎨 Theme Switcher */
     .theme-switcher {
       position: fixed;
       top: 10px;
@@ -81,7 +98,7 @@
 
     .theme-switcher button {
       margin: 5px;
-      padding: 5px 10px;
+      padding: 6px 12px;
       border-radius: 10px;
       border: none;
       cursor: pointer;
@@ -99,68 +116,63 @@
 
   <h1>⭐ Isabella Loves It ⭐</h1>
 
- <div class="game" onclick="go('boba-game.html')">
-    <div class="thumb"></div>
-    <h3>Boba Egg Tycoon</h3>
-    <p>Open eggs. Make boba. Get rich.</p>
+  <div class="games-container">
+
+    <div class="game" onclick="go('boba-game.html')">
+      <h3>Boba Egg Tycoon</h3>
+      <p>Open eggs. Make boba.</p>
+    </div>
+
+    <div class="game" onclick="go('blocks.html')">
+      <h3>Blocks</h3>
+      <p>Place blocks.</p>
+    </div>
+
+    <div class="game" onclick="go('blastblocks.html')">
+      <h3>Blast Blocks</h3>
+      <p>Puzzle chaos.</p>
+    </div>
+
+    <div class="game" onclick="go('blockschat.html')">
+      <h3>Blocks Chat</h3>
+      <p>Chat with players.</p>
+    </div>
+
+    <div class="game" onclick="go('updatelog.html')">
+      <h3>Update Log</h3>
+      <p>See what’s new.</p>
+    </div>
+
+    <div class="game" onclick="go('bugs.html')">
+      <h3>Bugs & Fixes</h3>
+      <p>Known issues.</p>
+    </div>
+
+    <div class="game" onclick="go('thanks.html')">
+      <h3>Thanks</h3>
+      <p>Support page.</p>
+    </div>
+
+    <div class="game" onclick="go('carts.html')">
+      <h3>Carts</h3>
+      <p>Don’t mind me.</p>
+    </div>
+
+    <div class="game" onclick="go('moveit.html')">
+      <h3>Move It</h3>
+      <p>Let’s move it.</p>
+    </div>
+
+    <div class="game" onclick="go('thebigidea.html')">
+      <h3>The BIG Game</h3>
+      <p>Find your favorite.</p>
+    </div>
+
   </div>
 
-  <div class="game" onclick="go('blocks.html')">
-    <div class="thumb"></div>
-    <h3>Blocks</h3>
-    <p>Place blocks with other players.</p>
-  </div>
-
-  <div class="game" onclick="go('blastblocks.html')">
-    <div class="thumb"></div>
-    <h3>Blast Blocks</h3>
-    <p>Block puzzle chaos.</p>
-  </div>
-
-  <div class="game" onclick="go('blockschat.html')">
-    <div class="thumb"></div>
-    <h3>Blocks Chat</h3>
-    <p>Chat with players.</p>
-  </div>
-
-  <div class="game" onclick="go('updatelog.html')">
-    <div class="thumb"></div>
-    <h3>Update Log</h3>
-    <p>See what’s new.</p>
-  </div>
-
-  <div class="game" onclick="go('bugs.html')">
-    <div class="thumb"></div>
-    <h3>Bugs & Fixes</h3>
-    <p>Known issues.</p>
-  </div>
-  
-<div class="game" onclick="go('thanks.html')">
-    <div class="thumb"></div>
-    <h3>thanks</h3>
-    <p>thanks thanks thanks.</p>
-  </div>
-  
-<div class="game" onclick="go('carts.html')">
-    <div class="thumb"></div>
-    <h3>carts</h3>
-    <p>uhhh dont mind me.</p>
-  </div>
-  
-<div class="game" onclick="go('moveit.html')">
-    <div class="thumb"></div>
-    <h3>move it</h3>
-    <p>lets move it.</p>
-  </div>
-  
-<div class="game" onclick="go('thebigidea.html')">
-    <div class="thumb"></div>
-    <h3>the big BIG game</h3>
-    <p>find the game you love.</p>
-  </div> 
   <div class="gallery">
     <h2>✨ My Games & Website ✨</h2>
-    <img src="">
+    <img src="image1.jpg">
     <img src="image2.jpg">
     <img src="image3.jpg">
   </div>
@@ -171,6 +183,10 @@
   </div>
 
   <script>
+    function go(page) {
+      window.location.href = page;
+    }
+
     function setGalaxy() {
       document.body.className = "galaxy";
       document.body.style.color = "white";
