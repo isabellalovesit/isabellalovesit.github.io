@@ -1,169 +1,105 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>isabellas cool games</title>
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Theme Changer</title>
-
+  <title>isabellas cool games!!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="yourimage.png">
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      text-align: center;
-      transition: background 0.4s, color 0.4s;
-    }
-
-    .container {
-      padding: 50px;
-    }
-
-    button {
-      padding: 15px 25px;
-      font-size: 16px;
-      cursor: pointer;
-      margin: 5px;
-    }
-
-    /* THEMES */
-    body.light {
-      background: #f5f5f5;
-      color: #111;
-    }
-
-    body.dark {
-      background: #111;
-      color: #f5f5f5;
-    }
-
-    body.neon {
       background: black;
-      color: #39ff14;
+      color: white;
+      text-align: center;
+      transition: 0.4s;
     }
 
-    body.chaos {
-      background: linear-gradient(45deg, red, blue, purple);
-      color: yellow;
-      animation: shake 0.2s infinite;
+    /* 🌌 Galaxy Background */
+    body.galaxy {
+      background: radial-gradient(circle at 20% 30%, #2a003f, black 60%),
+                  radial-gradient(circle at 80% 70%, #001f3f, black 60%);
+      background-color: black;
     }
 
-    @keyframes shake {
-      0% { transform: translate(0); }
-      25% { transform: translate(2px, -2px); }
-      50% { transform: translate(-2px, 2px); }
-      75% { transform: translate(2px, 2px); }
-      100% { transform: translate(-2px, -2px); }
+    h1 {
+      padding-top: 40px;
+      font-size: 40px;
     }
+
+    /* 🔘 Small Buttons */
+    .button-container {
+      margin: 40px auto;
+      max-width: 700px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .small-btn {
+      padding: 8px 15px;
+      font-size: 14px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      background: white;
+      color: black;
+      transition: 0.3s;
+    }
+
+    .small-btn:hover {
+      transform: scale(1.1);
+      background: #ff66cc;
+      color: white;
+    }
+
+    /* 🖼 Image Section */
+    .gallery {
+      margin-top: 100px;
+      padding: 40px;
+    }
+
+    .gallery img {
+      width: 250px;
+      margin: 15px;
+      border-radius: 15px;
+    }
+
+    /* 📩 Contact Section */
+    .contact {
+      margin-top: 100px;
+      padding: 40px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* 🎨 Theme Buttons */
+    .theme-switcher {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+    }
+
+    .theme-switcher button {
+      margin: 5px;
+      padding: 5px 10px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+    }
+
   </style>
 </head>
 
-<body class="dark">
+<body class="galaxy">
 
-  <div class="container">
-    <h1>Theme Changer</h1>
-    <p>Choose your theme</p>
-
-    <button onclick="setTheme('light')">☀️ Light</button>
-    <button onclick="setTheme('dark')">🌙 Dark</button>
-    <button onclick="setTheme('neon')">💚 Neon</button>
-    <button onclick="setTheme('chaos')">😈 Chaos</button>
+  <div class="theme-switcher">
+    <button onclick="setGalaxy()">Galaxy</button>
+    <button onclick="setLight()">Light</button>
   </div>
 
-  <script>
-    function setTheme(theme) {
-      document.body.className = theme;
-      localStorage.setItem("theme", theme);
-    }
+  <h1>⭐ Isabella Loves It ⭐</h1>
 
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) {
-      document.body.className = savedTheme;
-    }
-  </script>
-
-</body>
-</html>
-
-<style>
-body{
-  margin:0;
-  background:#080010;
-  color:#eee;
-  font-family:Arial, sans-serif;
-}
-
-/* Top bar */
-#topbar{
-  background:#000;
-  padding:15px;
-  font-size:28px;
-  font-weight:bold;
-  color:#c77dff;
-  border-bottom:3px solid #7b2cff;
-}
-
-/* Game grid */
-#games{
-  display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
-  gap:15px;
-  padding:20px;
-  max-width:1200px;
-  margin:auto;
-}
-
-/* Game buttons (MaxGames style) */
-.game{
-  background:#000;
-  border:2px solid #7b2cff;
-  padding:20px;
-  cursor:pointer;
-  transition:0.2s;
-}
-
-.game:hover{
-  background:#14001f;
-  transform:translateY(-4px);
-  box-shadow:0 0 20px #9d4edd;
-}
-
-/* Fake thumbnail */
-.thumb{
-  height:120px;
-  background:linear-gradient(135deg,#240046,#10002b);
-  margin-bottom:10px;
-}
-
-/* Title */
-.game h3{
-  margin:5px 0;
-  font-size:18px;
-  color:#e0c3ff;
-}
-
-/* Description */
-.game p{
-  font-size:14px;
-  opacity:0.8;
-}
-
-/* Footer */
-footer{
-  text-align:center;
-  padding:15px;
-  opacity:0.5;
-}
-</style>
-</head>
-
-<body>
-
-<div id="topbar">isabellas cool games</div>
-
-<div id="games">
-
-  <div class="game" onclick="go('boba-game.html')">
+ <div class="game" onclick="go('boba-game.html')">
     <div class="thumb"></div>
     <h3>Boba Egg Tycoon</h3>
     <p>Open eggs. Make boba. Get rich.</p>
@@ -221,54 +157,31 @@ footer{
     <div class="thumb"></div>
     <h3>the big BIG game</h3>
     <p>find the game you love.</p>
+  </div> 
+  <div class="gallery">
+    <h2>✨ My Games & Website ✨</h2>
+    <img src="">
+    <img src="image2.jpg">
+    <img src="image3.jpg">
   </div>
 
+  <div class="contact">
+    <h2>Contact Us!</h2>
+    <p>isabellamccain235@gmail.com</p>
+  </div>
 
-</div>
+  <script>
+    function setGalaxy() {
+      document.body.className = "galaxy";
+      document.body.style.color = "white";
+    }
 
-<footer>
-© isabellas cool games have fun!!!!
-</footer>
-
-<script>
-function go(page){
-  window.location.href = page;
-}
-</script>
-<button id="secretBtn"></button>
-
-<style>
-#secretBtn {
-  position: fixed;
-  bottom: 6px;
-  right: 6px;
-  width: 16px;
-  height: 16px;
-  background: red;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  opacity: 0.8;
-}
-</style>
-
-<script>
-let clicks = 0;
-document.getElementById("secretBtn").onclick = () => {
-  clicks++;
-  if (clicks === 5) {
-    alert("🤫 Secret unlocked!");
-  }
-};
-</script>
+    function setLight() {
+      document.body.className = "";
+      document.body.style.background = "white";
+      document.body.style.color = "black";
+    }
+  </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
