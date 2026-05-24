@@ -1,22 +1,36 @@
+# Fixed BLOCKS 10x10 Multiplayer Code
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BLOCKS 10x10 Multiplayer</title>
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       background: radial-gradient(circle, #0b0015, #000);
       color: #d6b3ff;
       font-family: monospace;
       text-align: center;
-      padding-top: 20px;
+      padding: 20px;
       margin: 0;
+      min-height: 100vh;
     }
 
     h1 {
       text-shadow: 0 0 15px #8f3bff;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 20px;
     }
 
     #grid {
@@ -25,7 +39,8 @@
       grid-template-rows: repeat(10, 40px);
       gap: 2px;
       justify-content: center;
-      margin-top: 20px;
+      margin: 20px auto;
+      width: max-content;
     }
 
     .cell {
@@ -33,12 +48,16 @@
       height: 40px;
       border: 1px solid #4b0082;
       cursor: pointer;
-      transition: background-color 0.15s;
+      transition: background-color 0.15s ease;
       background: #1a002a;
     }
 
+    .cell:hover {
+      filter: brightness(1.2);
+    }
+
     #colors {
-      margin-top: 20px;
+      margin-top: 10px;
     }
 
     #colorPicker {
@@ -53,81 +72,133 @@
 
     button {
       padding: 10px 20px;
-      margin: 15px;
+      margin-top: 15px;
       font-size: 18px;
       border-radius: 10px;
       cursor: pointer;
       border: none;
+      background: #4b0082;
+      color: white;
+      transition: 0.2s ease;
+    }
+
+    button:hover {
+      background: #6a0dad;
+      transform: scale(1.03);
+    }
+
+    @media (max-width: 500px) {
+      #grid {
+        grid-template-columns: repeat(10, 30px);
+        grid-template-rows: repeat(10, 30px);
+      }
+
+      .cell {
+        width: 30px;
+        height: 30px;
+      }
     }
   </style>
 </head>
 <body>
 
-<h1>🌌 BLOCKS 10x10 Multiplayer 🌌</h1>
-<p>Click a cell to place a block. Pick a color first!</p>
+  <h1>🌌 BLOCKS 10x10 Multiplayer 🌌</h1>
+  <p>Click a cell to place a block. Pick a color first!</p>
 
-<div id="colors">
-  <input type="color" id="colorPicker" value="#4b0082">
-</div>
+  <div id="colors">
+    <input type="color" id="colorPicker" value="#4b0082" />
+  </div>
 
-<div id="grid"></div>
+  <div id="grid"></div>
 
-<button onclick="location.href='index.html'">⬅ Back to Home</button>
+  <button id="backButton">⬅ Back to Home</button>
 
-<!-- Firebase (compat) -->
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <!-- Firebase Compat SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
-<script>
-  // ===== Firebase config =====
-  const firebaseConfig = {
-    apiKey: "AIzaSyAt2MMZ8ks1NQEOYdHvsTD0wjFpXScUsvc",
-    authDomain: "blockschat-multiplayer.firebaseapp.com",
-    databaseURL: "https://blockschat-multiplayer-default-rtdb.firebaseio.com",
-    projectId: "blockschat-multiplayer",
-    storageBucket: "blockschat-multiplayer.firebasestorage.app",
-    messagingSenderId: "394182284058",
-    appId: "1:394182284058:web:2c6b716fa76a4471c212a3",
-    measurementId: "G-4QES37MZH0"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
-
-  // ===== Grid setup =====
-  const gridSize = 10;
-  const gridContainer = document.getElementById("grid");
-  const cells = [];
-
-  let selectedColor = "#4b0082";
-
-  for (let i = 0; i < gridSize * gridSize; i++) {
-    const cell = document.createElement("div");
-    cell.className = "cell";
-
-    cell.onclick = () => {
-      cell.style.backgroundColor = selectedColor;
-      db.ref("grid/" + i).set(selectedColor);
+  <script>
+    // ===== Firebase Config =====
+    const firebaseConfig = {
+      apiKey: "AIzaSyAt2MMZ8ks1NQEOYdHvsTD0wjFpXScUsvc",
+      authDomain: "blockschat-multiplayer.firebaseapp.com",
+      databaseURL: "https://blockschat-multiplayer-default-rtdb.firebaseio.com",
+      projectId: "blockschat-multiplayer",
+      storageBucket: "blockschat-multiplayer.appspot.com",
+      messagingSenderId: "394182284058",
+      appId: "1:394182284058:web:2c6b716fa76a4471c212a3",
+      measurementId: "G-4QES37MZH0"
     };
 
-    gridContainer.appendChild(cell);
-    cells.push(cell);
-  }
-
-  // ===== Color picker =====
-  const colorPicker = document.getElementById("colorPicker");
-  colorPicker.addEventListener("input", () => {
-    selectedColor = colorPicker.value;
-  });
-
-  // ===== Firebase listener =====
-  db.ref("grid").on("value", snapshot => {
-    const data = snapshot.val() || {};
-    for (let i = 0; i < gridSize * gridSize; i++) {
-      cells[i].style.backgroundColor = data[i] || "#1a002a";
+    // Prevent duplicate Firebase initialization
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
     }
-  });
-</script>
+
+    const db = firebase.database();
+
+    // ===== Grid Setup =====
+    const gridSize = 10;
+    const gridContainer = document.getElementById("grid");
+    const colorPicker = document.getElementById("colorPicker");
+    const backButton = document.getElementById("backButton");
+
+    let selectedColor = colorPicker.value;
+    const cells = [];
+
+    // Create grid cells
+    for (let i = 0; i < gridSize * gridSize; i++) {
+      const cell = document.createElement("div");
+      cell.classList.add("cell");
+      cell.dataset.index = i;
+
+      cell.addEventListener("click", async () => {
+        try {
+          cell.style.backgroundColor = selectedColor;
+          await db.ref(`grid/${i}`).set(selectedColor);
+        } catch (error) {
+          console.error("Error updating cell:", error);
+        }
+      });
+
+      gridContainer.appendChild(cell);
+      cells.push(cell);
+    }
+
+    // ===== Color Picker =====
+    colorPicker.addEventListener("input", (event) => {
+      selectedColor = event.target.value;
+    });
+
+    // ===== Back Button =====
+    backButton.addEventListener("click", () => {
+      window.location.href = "index.html";
+    });
+
+    // ===== Firebase Live Listener =====
+    db.ref("grid").on("value", (snapshot) => {
+      const data = snapshot.val() || {};
+
+      for (let i = 0; i < gridSize * gridSize; i++) {
+        cells[i].style.backgroundColor = data[i] || "#1a002a";
+      }
+    }, (error) => {
+      console.error("Database read failed:", error);
+    });
+  </script>
 
 </body>
 </html>
+```
+
+## What Was Fixed
+
+* Fixed the `storageBucket` value (`appspot.com` instead of `firebasestorage.app`)
+* Added mobile responsiveness
+* Prevented Firebase from initializing multiple times
+* Added hover effects and smoother transitions
+* Added error handling for Firebase reads/writes
+* Replaced inline `onclick` with `addEventListener`
+* Improved layout spacing and button styling
+* Added viewport meta tag for phones/tablets
+* Made the back button safer and cleaner
